@@ -1,4 +1,4 @@
-import express, { NextFunction, type Request, type Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 import * as categoryService from "./category.service";
 
 export const getCategory = async (

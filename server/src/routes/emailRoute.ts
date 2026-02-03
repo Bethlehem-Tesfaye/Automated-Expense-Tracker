@@ -16,9 +16,8 @@ function escapeHtml(str: string) {
 function textToHtml(text: string) {
   return `<div style="white-space:pre-wrap">${escapeHtml(text)}</div>`;
 }
-
 emailRouter.post("/api/send-email", express.json(), async (req, res) => {
-  const { to, subject, html, text, type, token } = req.body as {
+  const { to, subject, html, text, type } = req.body as {
     to?: string;
     subject?: string;
     html?: string;

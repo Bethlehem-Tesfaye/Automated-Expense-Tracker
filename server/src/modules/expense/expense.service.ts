@@ -1,6 +1,6 @@
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
-import {
+import type {
   AddExpenseInput,
   DeleteExpenseType,
   GetExpenseByIdType,
@@ -41,7 +41,7 @@ export const getExpense = async ({
   search,
   categoryName
 }: GetExpenseType) => {
-  const whereCondition: any = {
+  const whereCondition: Prisma.ExpenseWhereInput = {
     userId,
     deletedAt: null
   };

@@ -1,7 +1,7 @@
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import CustomError from "../../lib/errors";
-import {
+import type {
   AddCategoryInput,
   UpdateCategoryInput,
   DeleteCategoryType,
@@ -29,7 +29,7 @@ export const getCategory = async ({
   offset = 0,
   search
 }: GetCategoryType) => {
-  const whereCondition: any = {
+  const whereCondition: Prisma.CategoryWhereInput = {
     userId,
     deletedAt: null
   };
