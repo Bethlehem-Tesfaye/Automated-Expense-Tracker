@@ -1,14 +1,10 @@
 import { betterAuth, logger } from "better-auth";
-import React from "react";
-import { render } from "@react-email/render";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { openAPI } from "better-auth/plugins";
 import { publishEmailJob } from "../../jobs/qstash";
 import { env } from "../../config/environments";
 import { prisma } from "../../lib/prisma";
-import { VerifyEmail } from "../../templates/emails/VerifyEmail";
-import ResetPasswordEmail from "../../templates/emails/PasswordReset";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -24,12 +20,15 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url, token }) => {
-      const html = await render(
-        React.createElement(ResetPasswordEmail, {
-          userName: user.name ?? user.email,
-          resetUrl: url
-        })
-      );
+      const html = `
+        <p>Hi ${user.name ?? user.email},</p>
+        <p>We received a request to reset your password. Click the link below to set a new password:</p>
+        <a href="${url}" style="display:inline-block;padding:10px 20px;background:#1a73e8;color:#fff;text-decoration:none;border-radius:4px;">
+          Reset Password
+        </a>
+        <p>If you did not request a password reset, you can ignore this email.</p>
+      `;
+
       await publishEmailJob({
         type: "reset",
         to: user.email,
@@ -44,12 +43,14 @@ export const auth = betterAuth({
     enabled: true,
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url }) => {
-      const html = await render(
-        React.createElement(VerifyEmail, {
-          name: user.name ?? user.email,
-          verifyUrl: url
-        })
-      );
+      const html = `
+        <p>Hello ${user.name ?? user.email},</p>
+        <p>Please verify your email by clicking the link below:</p>
+        <a href="${url}" style="display:inline-block;padding:10px 20px;background:#1a73e8;color:#fff;text-decoration:none;border-radius:4px;">
+          Verify Email
+        </a>
+      `;
+
       await publishEmailJob({
         type: "verification",
         to: user.email,
