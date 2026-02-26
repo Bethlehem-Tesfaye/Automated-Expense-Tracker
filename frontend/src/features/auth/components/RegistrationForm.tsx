@@ -32,7 +32,7 @@ const RegistrationForm: React.FC = () => {
       <div className="mb-6">
         <h2 className="text-2xl font-bold">Create your account</h2>
         <p className="text-sm text-gray-500">
-          Join RoomMatch to find your perfect roommate.
+          Join Expense Tracker to Keep track of your expenses.
         </p>
       </div>
 
