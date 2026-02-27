@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, ChevronDown, Menu, MessageSquare } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMyProfile } from "../../profile/hooks/useProfile";
 import { useLogout } from "../../auth/hooks/useLogout";
@@ -35,27 +35,12 @@ function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
       </button>
 
       <div className="ml-auto flex items-center justify-end gap-4">
-        <button
-          type="button"
-          className="text-[#1C4D8D] transition-colors hover:text-[#0F2854]"
-        >
-          <Bell size={18} />
-        </button>
-        <button
-          type="button"
-          className="text-[#1C4D8D] transition-colors hover:text-[#0F2854]"
-        >
-          <MessageSquare size={18} />
-        </button>
         <div className="relative">
           <button
             type="button"
             onClick={() => setIsProfileMenuOpen((current) => !current)}
             className="flex items-center gap-2 rounded-md px-1.5 py-1 transition-colors hover:bg-[#F3F8FF]"
           >
-            <p className="hidden text-sm font-medium text-[#0F2854] sm:block">
-              {displayName}
-            </p>
             {avatarUrl ? (
               <img
                 src={avatarUrl}
@@ -66,7 +51,10 @@ function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-[#BDE8F5] to-[#4988C4] text-xs font-semibold text-[#0F2854]">
                 {initials || "U"}
               </div>
-            )}
+            )}{" "}
+            <p className="hidden text-sm font-medium text-[#0F2854] sm:block">
+              {displayName}
+            </p>
             <ChevronDown size={16} className="text-[#1C4D8D]" />
           </button>
 

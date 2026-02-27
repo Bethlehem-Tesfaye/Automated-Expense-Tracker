@@ -161,3 +161,31 @@ export const getCategorySummary = async (
     return next(error);
   }
 };
+
+export const getExpenseReport = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.userId!;
+
+    const report = await expenseReportService.getExpenseReport(userId, {
+      period: req.query.period as
+        | "week"
+        | "month"
+        | "year"
+        | "custom"
+        | undefined,
+      date: req.query.date ? String(req.query.date) : undefined,
+      month: req.query.month ? String(req.query.month) : undefined,
+      year: req.query.year ? String(req.query.year) : undefined,
+      from: req.query.from ? String(req.query.from) : undefined,
+      to: req.query.to ? String(req.query.to) : undefined
+    });
+
+    return res.status(200).json(report);
+  } catch (error) {
+    return next(error);
+  }
+};

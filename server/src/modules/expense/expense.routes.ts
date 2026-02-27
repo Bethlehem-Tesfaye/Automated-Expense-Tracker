@@ -8,7 +8,8 @@ import {
   updateExpenseSchema,
   getExpenseQuerySchema,
   recentExpenseQuerySchema,
-  monthQuerySchema
+  monthQuerySchema,
+  reportQuerySchema
 } from "./expense.schema";
 
 export const expenseRouter = express.Router();
@@ -48,6 +49,13 @@ expenseRouter.get(
   authMiddleware,
   validate(monthQuerySchema, "query"),
   expenseContoller.getCategorySummary
+);
+
+expenseRouter.get(
+  "/report",
+  authMiddleware,
+  validate(reportQuerySchema, "query"),
+  expenseContoller.getExpenseReport
 );
 
 // Dynamic routes

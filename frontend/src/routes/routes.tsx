@@ -15,6 +15,7 @@ import ExpenseListPage from "../pages/expenses/ExpenseListPage";
 import CategoriesPage from "../pages/categories/CategoriesPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import PublicAuthLayout from "../lib/PublicAuthLayout";
+import ReportsPage from "../pages/reports/ReportsPage";
 
 const routes: RouteObject[] = [
   {
@@ -93,6 +94,16 @@ const routes: RouteObject[] = [
           {
             index: true,
             element: <CategoriesPage />,
+          },
+        ],
+      },
+      {
+        path: "reports",
+        element: <ExpensesLayoutPage />,
+        children: [
+          {
+            index: true,
+            element: <ReportsPage />,
           },
         ],
       },

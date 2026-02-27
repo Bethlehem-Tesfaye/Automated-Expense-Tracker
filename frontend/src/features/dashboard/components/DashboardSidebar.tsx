@@ -19,7 +19,7 @@ interface NavItem {
 const mainItems: NavItem[] = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
   { label: "Expenses", icon: Receipt, path: "/expenses/list" },
-  { label: "Reports", icon: BarChart3 },
+  { label: "Reports", icon: BarChart3, path: "/reports" },
   { label: "Categories", icon: PieChart, path: "/categories" },
 ];
 
@@ -42,6 +42,7 @@ function DashboardSidebar({
 }: DashboardSidebarProps) {
   const location = useLocation();
   const isExpensesRoute = location.pathname.startsWith("/expenses");
+  const isReportsRoute = location.pathname.startsWith("/reports");
 
   const handleNavigate = () => {
     onCloseMobile?.();
@@ -77,7 +78,11 @@ function DashboardSidebar({
                     onClick={handleNavigate}
                     className={({ isActive }) => {
                       const isParentActive =
-                        item.label === "Expenses" ? isExpensesRoute : isActive;
+                        item.label === "Expenses"
+                          ? isExpensesRoute
+                          : item.label === "Reports"
+                            ? isReportsRoute
+                            : isActive;
 
                       return `${itemClass} ${
                         isParentActive
