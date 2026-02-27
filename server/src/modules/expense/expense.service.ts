@@ -9,12 +9,27 @@ import type {
 } from "./types";
 import CustomError from "../../lib/errors";
 
+const normalizeExpenseDate = (input?: Date | string) => {
+  if (!input) return undefined;
+  if (input instanceof Date) return input;
+
+  const asDate = new Date(input);
+  if (Number.isNaN(asDate.getTime())) {
+    throw new CustomError("Invalid expense date", 400);
+  }
+
+  return asDate;
+};
+
 export const addExpense = async ({
   userId,
   amount,
   merchant,
-  categoryId
+  categoryId,
+  date
 }: AddExpenseInput) => {
+  const normalizedDate = normalizeExpenseDate(date);
+
   const category = await prisma.category.findFirst({
     where: { id: categoryId, userId }
   });
@@ -26,7 +41,7 @@ export const addExpense = async ({
       amount,
       merchant,
       categoryId,
-      date: new Date()
+      date: normalizedDate ?? new Date()
     }
   });
 
@@ -103,17 +118,24 @@ export const updateExpense = async ({
   userId,
   amount,
   merchant,
-  categoryId
+  categoryId,
+  date
 }: UpdateExpenseInput) => {
-  const data: Prisma.ExpenseUpdateInput = {};
+  const normalizedDate = normalizeExpenseDate(date);
+  const data: Prisma.ExpenseUncheckedUpdateManyInput = {};
 
   if (amount !== undefined) data.amount = amount;
   if (merchant !== undefined) data.merchant = merchant;
   if (categoryId !== undefined) {
-    data.category = {
-      connect: { id: categoryId }
-    };
+    const category = await prisma.category.findFirst({
+      where: { id: categoryId, userId, deletedAt: null }
+    });
+
+    if (!category) throw new CustomError("Invalid category", 400);
+    data.categoryId = categoryId;
   }
+  if (normalizedDate !== undefined) data.date = normalizedDate;
+
   const expense = await prisma.expense.updateMany({
     where: {
       id,

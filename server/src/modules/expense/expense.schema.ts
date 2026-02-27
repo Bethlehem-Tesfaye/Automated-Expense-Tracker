@@ -15,7 +15,9 @@ export const addExpenseSchema = z.object({
 
   categoryId: z
     .string({ message: "Category ID is required" })
-    .uuid("Invalid category ID format")
+    .uuid("Invalid category ID format"),
+
+  date: z.coerce.date().optional()
 });
 
 export const updateExpenseSchema = z.object({
@@ -26,7 +28,9 @@ export const updateExpenseSchema = z.object({
 
   merchant: z.string().min(1, "Merchant cannot be empty").optional(),
 
-  categoryId: z.string().uuid("Invalid category ID format").optional()
+  categoryId: z.string().uuid("Invalid category ID format").optional(),
+
+  date: z.coerce.date().optional()
 });
 
 export const getExpenseQuerySchema = z.object({

@@ -3,6 +3,7 @@ export type AddExpenseInput = {
   amount: number;
   merchant: string;
   categoryId: string;
+  date?: Date | string;
 };
 export type UpdateExpenseInput = {
   id: string;
@@ -10,6 +11,7 @@ export type UpdateExpenseInput = {
   amount?: number;
   merchant?: string;
   categoryId?: string;
+  date?: Date | string;
 };
 export type DeleteExpenseType = {
   id: string;

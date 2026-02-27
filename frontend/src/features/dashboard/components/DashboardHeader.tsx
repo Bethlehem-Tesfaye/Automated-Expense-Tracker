@@ -1,15 +1,22 @@
-import { Bell, MessageSquare } from "lucide-react";
+import { Bell, Menu, MessageSquare } from "lucide-react";
 
-function DashboardHeader() {
+interface DashboardHeaderProps {
+  onToggleMenu?: () => void;
+}
+
+function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
   return (
     <header className="flex h-16 items-center justify-between border-b border-[#BDE8F5] bg-white px-5">
-      <input
-        type="text"
-        placeholder="Search expenses..."
-        className="w-full max-w-xs rounded-md border border-[#4988C4] px-3 py-2 text-sm text-[#0F2854] outline-none focus:border-[#1C4D8D]"
-      />
+      <button
+        type="button"
+        onClick={onToggleMenu}
+        className="text-[#1C4D8D] transition-colors hover:text-[#0F2854] lg:hidden"
+        aria-label="Toggle menu"
+      >
+        <Menu size={20} />
+      </button>
 
-      <div className="ml-4 flex items-center gap-4">
+      <div className="ml-auto flex items-center justify-end gap-4">
         <button
           type="button"
           className="text-[#1C4D8D] transition-colors hover:text-[#0F2854]"

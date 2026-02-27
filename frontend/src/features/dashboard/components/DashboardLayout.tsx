@@ -1,3 +1,4 @@
+import { useState } from "react";
 import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
 import OverviewCards from "./OverviewCards";
@@ -11,20 +12,35 @@ import {
 } from "../hooks/useDashboardData";
 
 function DashboardLayout() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data, isLoading, isError, error } = useDashboardData();
 
   const { stats, categorySpending, monthlySpending, weeklySpending } =
     data ?? emptyDashboardData;
 
   return (
-    <div className="h-screen overflow-hidden bg-[#BDE8F5]/35 text-[#0F2854]">
+    <div className="h-screen overflow-hidden bg-gray-100 text-[#0F2854]">
+      {isMobileMenuOpen && (
+        <button
+          type="button"
+          className="fixed inset-0 z-40 bg-black/25 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-label="Close menu"
+        />
+      )}
+
       <div className="mx-auto flex h-full max-w-375 border-x border-[#BDE8F5] bg-white">
-        <DashboardSidebar />
+        <DashboardSidebar
+          isMobileOpen={isMobileMenuOpen}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
+        />
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-          <DashboardHeader />
+          <DashboardHeader
+            onToggleMenu={() => setIsMobileMenuOpen((current) => !current)}
+          />
 
-          <main className="flex-1 space-y-5 overflow-y-auto bg-[#BDE8F5]/20 p-5">
+          <main className="flex-1 space-y-5 overflow-y-auto bg-gray-50 p-5">
             {isLoading ? (
               <DashboardSkeleton />
             ) : (

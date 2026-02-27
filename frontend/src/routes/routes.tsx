@@ -8,6 +8,10 @@ import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "../pages/auth/ResetPasswordPage";
 import NotFound from "../components/NotFound";
+import ExpensesPage from "../pages/expenses/ExpensesPage";
+import ExpensesLayoutPage from "../pages/expenses/ExpensesLayoutPage";
+import AddExpensePage from "../pages/expenses/AddExpensePage";
+import ExpenseListPage from "../pages/expenses/ExpenseListPage";
 
 const routes: RouteObject[] = [
   {
@@ -50,6 +54,24 @@ const routes: RouteObject[] = [
       {
         path: "dashboard",
         element: <DashboardPage />,
+      },
+      {
+        path: "expenses",
+        element: <ExpensesLayoutPage />,
+        children: [
+          {
+            index: true,
+            element: <ExpensesPage />,
+          },
+          {
+            path: "add",
+            element: <AddExpensePage />,
+          },
+          {
+            path: "list",
+            element: <ExpenseListPage />,
+          },
+        ],
       },
     ],
   },
