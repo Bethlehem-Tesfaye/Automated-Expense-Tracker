@@ -13,19 +13,27 @@ import ExpensesLayoutPage from "../pages/expenses/ExpensesLayoutPage";
 import AddExpensePage from "../pages/expenses/AddExpensePage";
 import ExpenseListPage from "../pages/expenses/ExpenseListPage";
 import CategoriesPage from "../pages/categories/CategoriesPage";
+import ProfilePage from "../pages/profile/ProfilePage";
+import PublicAuthLayout from "../lib/PublicAuthLayout";
 
 const routes: RouteObject[] = [
   {
     path: "/",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
+    element: <PublicAuthLayout />,
+    children: [
+      {
+        index: true,
+        element: <LoginPage />,
+      },
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
+    ],
   },
   {
     path: "/verify-notice",
@@ -55,6 +63,10 @@ const routes: RouteObject[] = [
       {
         path: "dashboard",
         element: <DashboardPage />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
       },
       {
         path: "expenses",

@@ -39,7 +39,7 @@ const RegistrationForm: React.FC = () => {
       <div className="flex gap-3 mb-6">
         <button
           type="button"
-          onClick={() => signInWithGoogle}
+          onClick={() => signInWithGoogle()}
           className="flex-1 cursor-pointer border rounded-lg py-2 text-sm font-medium flex items-center justify-center gap-2"
         >
           <span className="h-5 w-5 rounded-full border border-[#4988C4] flex items-center justify-center text-xs font-bold text-[#1C4D8D]">

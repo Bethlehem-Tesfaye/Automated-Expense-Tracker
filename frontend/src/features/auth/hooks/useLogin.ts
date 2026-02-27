@@ -2,6 +2,13 @@ import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 import { authClient } from "../../../lib/authClient";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../../lib/axios";
+
+interface ProfileCompletionResponse {
+  data: {
+    isComplete: boolean;
+  };
+}
 
 interface LoginInput {
   email: string;
@@ -38,9 +45,22 @@ export const useLogin = (): UseLoginResult => {
         if (res.error) throw new Error(res.error.message);
         return res.data;
       },
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
         toast.success(`Welcome back, ${data.user.email}!`);
-        navigate("/dashboard");
+
+        try {
+          const profileResponse =
+            await api.get<ProfileCompletionResponse>("/api/profile/me");
+
+          if (profileResponse.data.data.isComplete) {
+            navigate("/dashboard");
+            return;
+          }
+
+          navigate("/profile");
+        } catch {
+          navigate("/profile");
+        }
       },
       onError: (error: Error) => {
         toast.error(error.message || "Login failed, try again");
