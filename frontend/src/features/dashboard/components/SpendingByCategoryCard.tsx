@@ -14,6 +14,8 @@ function SpendingByCategoryCard({ items }: SpendingByCategoryCardProps) {
   const radius = 56;
   const strokeWidth = 30;
   const size = 160;
+  const padding = 16;
+  const chartSize = size + padding * 2;
   const center = size / 2;
   const circumference = 2 * Math.PI * radius;
   const labelRadius = radius + 34;
@@ -73,13 +75,18 @@ function SpendingByCategoryCard({ items }: SpendingByCategoryCardProps) {
             </div>
           )}
 
-          <svg viewBox={`0 0 ${size} ${size}`} className="h-52 w-52">
-            <g transform={`rotate(-90 ${center} ${center})`}>
+          <svg
+            viewBox={`0 0 ${chartSize} ${chartSize}`}
+            className="h-52 w-52 overflow-visible"
+          >
+            <g
+              transform={`rotate(-90 ${center + padding} ${center + padding})`}
+            >
               {donutSegments.map(({ item, length, offset }) => (
                 <circle
                   key={item.category}
-                  cx={center}
-                  cy={center}
+                  cx={center + padding}
+                  cy={center + padding}
                   r={radius}
                   fill="none"
                   stroke={item.color}
@@ -96,8 +103,8 @@ function SpendingByCategoryCard({ items }: SpendingByCategoryCardProps) {
             {donutSegments.map(({ item, labelX, labelY }) => (
               <text
                 key={`${item.category}-label`}
-                x={labelX}
-                y={labelY}
+                x={labelX + padding}
+                y={labelY + padding}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fontSize="13"
@@ -107,9 +114,14 @@ function SpendingByCategoryCard({ items }: SpendingByCategoryCardProps) {
                 {item.amount}%
               </text>
             ))}
-          </svg>
 
-          <div className="pointer-events-none absolute inset-9.5 rounded-full bg-white" />
+            <circle
+              cx={center + padding}
+              cy={center + padding}
+              r={radius - strokeWidth / 2}
+              fill="white"
+            />
+          </svg>
         </div>
 
         <div className="flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-2">

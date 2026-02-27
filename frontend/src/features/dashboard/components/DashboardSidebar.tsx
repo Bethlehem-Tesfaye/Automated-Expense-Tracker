@@ -18,9 +18,9 @@ interface NavItem {
 
 const mainItems: NavItem[] = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { label: "Expenses", icon: Receipt, path: "/expenses" },
+  { label: "Expenses", icon: Receipt, path: "/expenses/list" },
   { label: "Reports", icon: BarChart3 },
-  { label: "Categories", icon: PieChart },
+  { label: "Categories", icon: PieChart, path: "/categories" },
 ];
 
 const footerItems: NavItem[] = [
@@ -75,19 +75,22 @@ function DashboardSidebar({
                   <NavLink
                     to={item.path}
                     onClick={handleNavigate}
-                    className={({ isActive }) =>
-                      `${itemClass} ${
-                        isActive
+                    className={({ isActive }) => {
+                      const isParentActive =
+                        item.label === "Expenses" ? isExpensesRoute : isActive;
+
+                      return `${itemClass} ${
+                        isParentActive
                           ? "bg-[#1C4D8D] text-white"
                           : "text-[#0F2854] hover:bg-[#BDE8F5]"
-                      }`
-                    }
+                      }`;
+                    }}
                   >
                     <Icon size={15} />
                     <span>{item.label}</span>
                   </NavLink>
 
-                  {item.label === "Expenses" && isExpensesRoute && (
+                  {item.label === "Expenses" && (
                     <div className="relative mt-1 space-y-1 pl-8 before:absolute before:bottom-2 before:left-3 before:top-2 before:border-l before:border-dashed before:border-[#94A3B8]">
                       <NavLink
                         to="/expenses/add"

@@ -3,6 +3,7 @@ import {
   useCreateExpense,
   useExpenseCategories,
 } from "../../features/expenses/hooks/useExpenses";
+import { useCreateCategory } from "../../features/categories/hooks/useCategories";
 
 function AddExpensePage() {
   const {
@@ -11,6 +12,7 @@ function AddExpensePage() {
     isError,
   } = useExpenseCategories();
   const createExpenseMutation = useCreateExpense();
+  const createCategoryMutation = useCreateCategory();
 
   const categories = categoriesResponse?.data ?? [];
 
@@ -37,8 +39,13 @@ function AddExpensePage() {
         <AddExpenseForm
           categories={categories}
           isSubmitting={createExpenseMutation.isPending}
+          isCreatingCategory={createCategoryMutation.isPending}
           onSubmit={async (payload) => {
             await createExpenseMutation.mutateAsync(payload);
+          }}
+          onCreateCategory={async (name) => {
+            const response = await createCategoryMutation.mutateAsync({ name });
+            return response?.data ?? null;
           }}
         />
       )}

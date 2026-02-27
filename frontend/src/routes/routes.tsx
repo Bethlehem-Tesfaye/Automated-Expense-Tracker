@@ -12,6 +12,7 @@ import ExpensesPage from "../pages/expenses/ExpensesPage";
 import ExpensesLayoutPage from "../pages/expenses/ExpensesLayoutPage";
 import AddExpensePage from "../pages/expenses/AddExpensePage";
 import ExpenseListPage from "../pages/expenses/ExpenseListPage";
+import CategoriesPage from "../pages/categories/CategoriesPage";
 
 const routes: RouteObject[] = [
   {
@@ -70,6 +71,16 @@ const routes: RouteObject[] = [
           {
             path: "list",
             element: <ExpenseListPage />,
+          },
+        ],
+      },
+      {
+        path: "categories",
+        element: <ExpensesLayoutPage />,
+        children: [
+          {
+            index: true,
+            element: <CategoriesPage />,
           },
         ],
       },
