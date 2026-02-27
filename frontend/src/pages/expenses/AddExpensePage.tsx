@@ -1,4 +1,5 @@
 import AddExpenseForm from "../../features/expenses/components/AddExpenseForm";
+import { Skeleton } from "../../components/ui/skeleton";
 import {
   useCreateExpense,
   useExpenseCategories,
@@ -32,8 +33,28 @@ function AddExpensePage() {
       )}
 
       {isLoading ? (
-        <article className="rounded-xl border border-[#BDE8F5] bg-white p-4 text-sm text-[#1C4D8D]">
-          Loading categories...
+        <article className="rounded-lg border border-gray-200 bg-[#F8FAFC] p-6">
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-16" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-12" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </div>
+          <div className="mt-6 flex justify-end">
+            <Skeleton className="h-10 w-28" />
+          </div>
         </article>
       ) : (
         <AddExpenseForm
