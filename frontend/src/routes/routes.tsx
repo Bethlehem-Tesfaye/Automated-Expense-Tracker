@@ -12,6 +12,7 @@ import ExpensesPage from "../pages/expenses/ExpensesPage";
 import ExpensesLayoutPage from "../pages/expenses/ExpensesLayoutPage";
 import AddExpensePage from "../pages/expenses/AddExpensePage";
 import ExpenseListPage from "../pages/expenses/ExpenseListPage";
+import ScanReceiptPage from "../pages/expenses/ScanReceiptPage";
 import CategoriesPage from "../pages/categories/CategoriesPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import PublicAuthLayout from "../lib/PublicAuthLayout";
@@ -84,6 +85,10 @@ const routes: RouteObject[] = [
           {
             path: "list",
             element: <ExpenseListPage />,
+          },
+          {
+            path: "scan",
+            element: <ScanReceiptPage />,
           },
         ],
       },
