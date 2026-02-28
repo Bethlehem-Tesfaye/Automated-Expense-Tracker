@@ -1,4 +1,5 @@
 import { Pencil, Trash2 } from "lucide-react";
+import { useCurrencyFormatter } from "../../settings/hooks/useSettings";
 import type { ExpenseItem } from "../types/expenses";
 
 interface ExpenseListTableProps {
@@ -14,6 +15,8 @@ function ExpenseListTable({
   onEdit,
   onDelete,
 }: ExpenseListTableProps) {
+  const { formatMoney } = useCurrencyFormatter();
+
   const formatDate = (value: string) => {
     const parsedDate = new Date(value);
 
@@ -59,7 +62,7 @@ function ExpenseListTable({
                 </span>
               </td>
               <td className="px-5 py-6 text-sm font-semibold text-[#4988C4]">
-                ${expense.amount.toFixed(2)}
+                {formatMoney(expense.amount)}
               </td>
               <td className="px-5 py-6">
                 <div className="flex items-center gap-5 text-gray-500">

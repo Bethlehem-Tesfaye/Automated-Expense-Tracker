@@ -1,17 +1,13 @@
 import { useMemo, useState } from "react";
 import { useExpenseReport } from "../../features/reports/hooks/useReports";
+import { useCurrencyFormatter } from "../../features/settings/hooks/useSettings";
 import type {
   ExpenseReportQuery,
   ReportPeriod,
 } from "../../features/reports/types/reports";
 
-const formatMoney = (value: number) =>
-  `$${value.toLocaleString("en-US", {
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 2,
-  })}`;
-
 function ReportsPage() {
+  const { formatMoney } = useCurrencyFormatter();
   const [period, setPeriod] = useState<ReportPeriod>("week");
   const [date, setDate] = useState("");
   const [month, setMonth] = useState("");

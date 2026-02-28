@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCurrencyFormatter } from "../../settings/hooks/useSettings";
 import type { MonthlySpendingData } from "../types/dashboard";
 
 interface MonthlyTrendCardProps {
@@ -6,6 +7,7 @@ interface MonthlyTrendCardProps {
 }
 
 function MonthlyTrendCard({ items }: MonthlyTrendCardProps) {
+  const { formatMoney, formatCompactMoney } = useCurrencyFormatter();
   const [hoveredMonthIndex, setHoveredMonthIndex] = useState<number | null>(
     null,
   );
@@ -28,9 +30,7 @@ function MonthlyTrendCard({ items }: MonthlyTrendCardProps) {
         <div className="flex items-start">
           <div className="mt-1 flex h-44 w-10 flex-col justify-between pr-2 text-right text-[11px] text-[#1C4D8D]">
             {yTicks.map((tick, index) => (
-              <span key={`y-tick-${index}`}>
-                {tick.toLocaleString("en-US")}
-              </span>
+              <span key={`y-tick-${index}`}>{formatCompactMoney(tick)}</span>
             ))}
           </div>
 
@@ -61,7 +61,7 @@ function MonthlyTrendCard({ items }: MonthlyTrendCardProps) {
                     >
                       {hoveredMonthIndex === index && (
                         <div className="absolute -top-8 left-1/2 -translate-x-1/2 rounded-md bg-[#0F2854] px-2 py-1 text-xs font-medium whitespace-nowrap text-white shadow-sm">
-                          {item.month}: ${item.amount.toLocaleString("en-US")}
+                          {item.month}: {formatMoney(item.amount)}
                         </div>
                       )}
 

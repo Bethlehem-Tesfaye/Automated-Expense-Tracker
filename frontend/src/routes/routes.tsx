@@ -12,10 +12,14 @@ import ExpensesPage from "../pages/expenses/ExpensesPage";
 import ExpensesLayoutPage from "../pages/expenses/ExpensesLayoutPage";
 import AddExpensePage from "../pages/expenses/AddExpensePage";
 import ExpenseListPage from "../pages/expenses/ExpenseListPage";
+import ScanReceiptPage from "../pages/expenses/ScanReceiptPage";
 import CategoriesPage from "../pages/categories/CategoriesPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import PublicAuthLayout from "../lib/PublicAuthLayout";
 import ReportsPage from "../pages/reports/ReportsPage";
+import SettingsPage from "../pages/settings/SettingsPage";
+import SupportPage from "../pages/support/SupportPage";
+import SupportAdminPage from "../pages/support/SupportAdminPage";
 
 const routes: RouteObject[] = [
   {
@@ -85,6 +89,10 @@ const routes: RouteObject[] = [
             path: "list",
             element: <ExpenseListPage />,
           },
+          {
+            path: "scan",
+            element: <ScanReceiptPage />,
+          },
         ],
       },
       {
@@ -104,6 +112,30 @@ const routes: RouteObject[] = [
           {
             index: true,
             element: <ReportsPage />,
+          },
+        ],
+      },
+      {
+        path: "settings",
+        element: <ExpensesLayoutPage />,
+        children: [
+          {
+            index: true,
+            element: <SettingsPage />,
+          },
+        ],
+      },
+      {
+        path: "support",
+        element: <ExpensesLayoutPage />,
+        children: [
+          {
+            index: true,
+            element: <SupportPage />,
+          },
+          {
+            path: "admin",
+            element: <SupportAdminPage />,
           },
         ],
       },

@@ -1,5 +1,75 @@
 @import "tailwindcss";
 
+:root {
+  color-scheme: light;
+}
+
+html.theme-dark {
+  color-scheme: dark;
+}
+
+html.theme-dark body {
+  background-color: #020617;
+  color: #e2e8f0;
+}
+
+html.theme-dark .bg-white,
+html.theme-dark .bg-white\/95,
+html.theme-dark .bg-white\/10 {
+  background-color: #0f172a !important;
+}
+
+html.theme-dark .bg-gray-50,
+html.theme-dark .bg-gray-100,
+html.theme-dark .bg-\[\#F8FAFC\],
+html.theme-dark .bg-\[\#F8FBFF\],
+html.theme-dark .bg-\[\#F6FAFF\],
+html.theme-dark .bg-\[\#F3F8FF\],
+html.theme-dark .bg-\[\#EEF6FF\],
+html.theme-dark .bg-\[\#EAF3FF\],
+html.theme-dark .bg-\[\#DCE9FA\] {
+  background-color: #111827 !important;
+}
+
+html.theme-dark .text-\[\#0F2854\],
+html.theme-dark .text-\[\#111827\] {
+  color: #e2e8f0 !important;
+}
+
+html.theme-dark .text-\[\#1C4D8D\],
+html.theme-dark .text-\[\#4988C4\],
+html.theme-dark .text-gray-500,
+html.theme-dark .text-gray-700 {
+  color: #93c5fd !important;
+}
+
+html.theme-dark .border-gray-200,
+html.theme-dark .border-gray-300,
+html.theme-dark .border-\[\#BDE8F5\],
+html.theme-dark .border-\[\#D6E6FB\],
+html.theme-dark .border-\[\#E6EEF8\],
+html.theme-dark .border-\[\#DCE9FA\],
+html.theme-dark .border-\[\#BBD6F7\] {
+  border-color: #334155 !important;
+}
+
+html.theme-dark input,
+html.theme-dark select,
+html.theme-dark textarea {
+  background-color: #0b1220 !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+html.theme-dark input::placeholder,
+html.theme-dark textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.theme-dark table tr {
+  border-color: #334155;
+}
+
 @keyframes skeleton-shimmer {
   100% {
     transform: translateX(100%);

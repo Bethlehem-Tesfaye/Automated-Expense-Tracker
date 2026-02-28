@@ -24,8 +24,8 @@ const mainItems: NavItem[] = [
 ];
 
 const footerItems: NavItem[] = [
-  { label: "Settings", icon: Settings },
-  { label: "Support", icon: CircleHelp },
+  { label: "Settings", icon: Settings, path: "/settings" },
+  { label: "Support", icon: CircleHelp, path: "/support" },
 ];
 
 const itemClass =
@@ -98,6 +98,19 @@ function DashboardSidebar({
                   {item.label === "Expenses" && (
                     <div className="relative mt-1 space-y-1 pl-8 before:absolute before:bottom-2 before:left-3 before:top-2 before:border-l before:border-dashed before:border-[#94A3B8]">
                       <NavLink
+                        to="/expenses/scan"
+                        onClick={handleNavigate}
+                        className={({ isActive }) =>
+                          `relative flex h-8 items-center rounded-md px-2 pl-4 text-xs font-medium before:absolute before:-left-3 before:top-1/2 before:h-px before:w-2 before:-translate-y-1/2 before:bg-[#94A3B8] ${
+                            isActive
+                              ? "bg-[#BDE8F5] text-[#0F2854]"
+                              : "text-[#1C4D8D] hover:bg-[#BDE8F5]/60"
+                          }`
+                        }
+                      >
+                        Scan Receipt
+                      </NavLink>{" "}
+                      <NavLink
                         to="/expenses/add"
                         onClick={handleNavigate}
                         className={({ isActive }) =>
@@ -146,6 +159,27 @@ function DashboardSidebar({
         <nav className="mt-auto space-y-1.5 border-t border-[#BDE8F5] pt-5">
           {footerItems.map((item) => {
             const Icon = item.icon;
+
+            if (item.path) {
+              return (
+                <NavLink
+                  key={item.label}
+                  to={item.path}
+                  onClick={handleNavigate}
+                  className={({ isActive }) =>
+                    `${itemClass} ${
+                      isActive
+                        ? "bg-[#1C4D8D] text-white"
+                        : "text-[#0F2854] hover:bg-[#BDE8F5]"
+                    }`
+                  }
+                >
+                  <Icon size={15} />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            }
+
             return (
               <button
                 type="button"

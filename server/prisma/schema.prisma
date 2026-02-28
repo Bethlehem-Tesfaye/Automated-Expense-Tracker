@@ -8,21 +8,37 @@ datasource db {
 }
 
 model User {
-  id            String     @id
-  name          String
-  email         String
-  emailVerified Boolean    @default(false)
-  image         String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @default(now()) @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  profiles      Profile[]
-  expenses      Expense[]
-  categories    Category[]
+  id              String           @id
+  name            String
+  email           String
+  emailVerified   Boolean          @default(false)
+  image           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
+  sessions        Session[]
+  accounts        Account[]
+  profiles        Profile[]
+  expenses        Expense[]
+  categories      Category[]
+  supportRequests SupportRequest[]
 
   @@unique([email])
   @@map("user")
+}
+
+model SupportRequest {
+  id        String   @id @default(uuid())
+  userId    String
+  subject   String
+  message   String
+  category  String
+  status    String   @default("open")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("support_request")
 }
 
 model Session {
@@ -71,16 +87,19 @@ model Verification {
 }
 
 model Profile {
-  id            String   @id @default(cuid())
-  userId        String   @unique
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bio           String?
-  displayName   String?
-  avatarUrl     String?
-  monthlyBudget Float?
-  monthlyIncome Float?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now()) @updatedAt
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio                  String?
+  displayName          String?
+  avatarUrl            String?
+  monthlyBudget        Float?
+  monthlyIncome        Float?
+  defaultReceiptEngine String   @default("basic")
+  defaultCurrency      String   @default("ETB")
+  emailNotifications   Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @default(now()) @updatedAt
 
   @@map("profile")
 }
