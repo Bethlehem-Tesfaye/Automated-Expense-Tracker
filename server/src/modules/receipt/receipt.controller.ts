@@ -8,7 +8,7 @@ export const processReceipt = async (
   next: NextFunction
 ) => {
   try {
-    const file = req.file;
+    const { file } = req;
     const requestedEngine = req.body?.engine;
 
     if (!file) {

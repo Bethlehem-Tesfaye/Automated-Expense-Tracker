@@ -34,6 +34,7 @@
     "no-await-in-loop": "off",
     "no-restricted-syntax": "off",
     "no-inner-declarations": "off",
+    "no-useless-escape":"off",
 
     /* ---------- Prisma / DB helpers ---------- */
     "no-underscore-dangle": [

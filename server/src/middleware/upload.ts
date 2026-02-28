@@ -6,7 +6,7 @@ interface AuthenticatedRequest extends Request {
   userId?: string;
 }
 
-export const makeUploader = (folder: string) => {
+export const makeUploader = (_folder: string) => {
   const storage = multer.memoryStorage();
 
   const fileFilter = (

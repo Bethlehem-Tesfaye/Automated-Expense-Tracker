@@ -1,28 +1,110 @@
-# App Starter
+# Automated Expense Tracker
 
-A full-stack application starter template for building modern web applications.
+Full-stack expense management app with authentication, OCR-powered receipt extraction (Tesseract + Gemini), Veryfi pro parsing, dashboards, settings, and support workflows.
 
-- **Frontend:** React with TypeScript
-- **Backend:** Node.js (Express) with TypeScript
+## Tech Stack
+
+- Frontend: React + TypeScript + Vite + Tailwind + TanStack Query
+- Backend: Node.js + Express + TypeScript + Prisma
+- Database: PostgreSQL
+- Auth: Better Auth
 
 ## Features
 
-- **Database:** PostgreSQL setup using Prisma ORM
-- **Authentication:** Better Auth integration for secure user management
-- **Email:** Gmail API setup for sending emails
-- **Jobs/Queue:** QStash setup for background jobs or reminders
-- **Media:** Cloudinary integration for storing images in the cloud
-- **Code Quality:** ESLint and Prettier for consistent formatting
-- **Testing:** Vitest setup for unit and integration tests
-- **CI/CD:** Automated linting, formatting, and testing in the pipeline
+- Auth flow: register, login, forgot/reset password, verify email
+- Expense management: add/list expenses with categories
+- Dashboard analytics: totals, trends, weekly/monthly charts
+- Receipt processing:
+  - Basic mode: Tesseract OCR + Gemini parsing
+  - Pro mode: Veryfi parsing (with OCR fallback)
+- User settings:
+  - Default receipt engine
+  - Default currency (ETB, USD, EUR)
+  - Email notification preference
+- Profile management: display info, budget, income, avatar
+- Theme support: light/dark mode with localStorage persistence
+- Support module:
+  - User support request submission + history
+  - Admin queue to review and resolve requests
+
+## Project Structure
+
+```
+Automated-Expense-Tracker/
+├─ frontend/
+└─ server/
+```
 
 ## Getting Started
 
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Configure environment variables (`.env`)
-4. Run the app: `npm run dev`
+### 1) Install dependencies
 
-## Contributing
+Run in each app folder:
 
-Feel free to use and extend this starter for your own projects.
+```bash
+cd server
+npm install
+
+cd ../frontend
+npm install
+```
+
+### 2) Configure environment variables
+
+Copy the example files and fill in your own values:
+
+```bash
+cp server/.env.example server/.env
+cp frontend/.env.example frontend/.env
+```
+
+On Windows PowerShell:
+
+```powershell
+Copy-Item server/.env.example server/.env
+Copy-Item frontend/.env.example frontend/.env
+```
+
+### 3) Run database migrations
+
+```bash
+cd server
+npx prisma migrate dev
+```
+
+### 4) Start development servers
+
+Backend:
+
+```bash
+cd server
+npm run dev
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm run dev
+```
+
+## Scripts
+
+Server (`server/package.json`):
+
+- `npm run dev` - start backend with nodemon
+- `npm run build` - compile TypeScript
+- `npm run lint` - run ESLint
+- `npm run test` - run Vitest
+
+Frontend (`frontend/package.json`):
+
+- `npm run dev` - start Vite dev server
+- `npm run build` - type-check + production build
+- `npm run lint` - run ESLint
+- `npm run preview` - preview built app
+
+## Notes
+
+- Default profile currency is ETB.
+- Support admin UI is shown only to users allowed by `SUPPORT_ADMIN_EMAILS` on the backend.
