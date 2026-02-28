@@ -19,7 +19,7 @@ function DashboardLayout() {
     data ?? emptyDashboardData;
 
   return (
-    <div className="h-screen overflow-hidden bg-gray-100 text-[#0F2854]">
+    <div className="h-screen overflow-hidden bg-white text-[#0F2854]">
       {isMobileMenuOpen && (
         <button
           type="button"
