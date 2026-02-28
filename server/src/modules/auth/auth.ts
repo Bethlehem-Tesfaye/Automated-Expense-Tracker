@@ -6,6 +6,14 @@ import { publishEmailJob } from "../../jobs/qstash";
 import { env } from "../../config/environments";
 import { prisma } from "../../lib/prisma";
 
+const authBaseURL = (
+  env.BETTER_AUTH_BASE_URL || "http://localhost:4000/api/auth"
+).replace(/\/$/, "");
+
+const googleClientId = env.GOOGLE_CLIENT_ID_BAUTH || env.GOOGLE_CLIENT_ID;
+const googleClientSecret =
+  env.GOOGLE_CLIENT_SECRET_BAUTH || env.GOOGLE_CLIENT_SECRET;
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql"
@@ -16,6 +24,7 @@ export const auth = betterAuth({
     "http://localhost:3000",
     "http://localhost:4000"
   ].filter(Boolean) as string[],
+  baseURL: authBaseURL,
 
   emailAndPassword: {
     enabled: true,
@@ -67,8 +76,8 @@ export const auth = betterAuth({
   socialProviders: {
     google: {
       prompt: "select_account",
-      clientId: env.GOOGLE_CLIENT_ID ?? process.env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET ?? process.env.GOOGLE_CLIENT_SECRET
+      clientId: googleClientId!,
+      clientSecret: googleClientSecret!
     }
   },
 
