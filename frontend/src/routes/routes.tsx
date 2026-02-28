@@ -8,19 +8,33 @@ import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "../pages/auth/ResetPasswordPage";
 import NotFound from "../components/NotFound";
+import ExpensesPage from "../pages/expenses/ExpensesPage";
+import ExpensesLayoutPage from "../pages/expenses/ExpensesLayoutPage";
+import AddExpensePage from "../pages/expenses/AddExpensePage";
+import ExpenseListPage from "../pages/expenses/ExpenseListPage";
+import CategoriesPage from "../pages/categories/CategoriesPage";
+import ProfilePage from "../pages/profile/ProfilePage";
+import PublicAuthLayout from "../lib/PublicAuthLayout";
+import ReportsPage from "../pages/reports/ReportsPage";
 
 const routes: RouteObject[] = [
   {
     path: "/",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
+    element: <PublicAuthLayout />,
+    children: [
+      {
+        index: true,
+        element: <LoginPage />,
+      },
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
+    ],
   },
   {
     path: "/verify-notice",
@@ -50,6 +64,48 @@ const routes: RouteObject[] = [
       {
         path: "dashboard",
         element: <DashboardPage />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
+      },
+      {
+        path: "expenses",
+        element: <ExpensesLayoutPage />,
+        children: [
+          {
+            index: true,
+            element: <ExpensesPage />,
+          },
+          {
+            path: "add",
+            element: <AddExpensePage />,
+          },
+          {
+            path: "list",
+            element: <ExpenseListPage />,
+          },
+        ],
+      },
+      {
+        path: "categories",
+        element: <ExpensesLayoutPage />,
+        children: [
+          {
+            index: true,
+            element: <CategoriesPage />,
+          },
+        ],
+      },
+      {
+        path: "reports",
+        element: <ExpensesLayoutPage />,
+        children: [
+          {
+            index: true,
+            element: <ReportsPage />,
+          },
+        ],
       },
     ],
   },

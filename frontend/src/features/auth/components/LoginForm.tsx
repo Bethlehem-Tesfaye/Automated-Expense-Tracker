@@ -28,7 +28,7 @@ const LoginForm: React.FC = () => {
       <div className="mb-6">
         <h2 className="text-2xl font-bold">Welcome back</h2>
         <p className="text-sm text-gray-500">
-          Enter your credentials to access RoomMatch.
+          Enter your credentials to access Expense Tracker.
         </p>
       </div>
 
@@ -110,7 +110,7 @@ const LoginForm: React.FC = () => {
           disabled={isLoading}
           className="w-full bg-[#1C4D8D] hover:bg-[#0F2854] text-white cursor-pointer rounded-md py-2 font-semibold transition-colors disabled:opacity-60"
         >
-          {isLoading ? "Signing in..." : "Sign in to RoomMatch"}
+          {isLoading ? "Signing in..." : "Sign in to Expense Tracker"}
         </button>
       </form>
 
