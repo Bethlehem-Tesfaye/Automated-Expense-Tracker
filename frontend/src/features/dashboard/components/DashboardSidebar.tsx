@@ -24,8 +24,8 @@ const mainItems: NavItem[] = [
 ];
 
 const footerItems: NavItem[] = [
-  { label: "Settings", icon: Settings },
-  { label: "Support", icon: CircleHelp },
+  { label: "Settings", icon: Settings, path: "/settings" },
+  { label: "Support", icon: CircleHelp, path: "/support" },
 ];
 
 const itemClass =
@@ -159,6 +159,27 @@ function DashboardSidebar({
         <nav className="mt-auto space-y-1.5 border-t border-[#BDE8F5] pt-5">
           {footerItems.map((item) => {
             const Icon = item.icon;
+
+            if (item.path) {
+              return (
+                <NavLink
+                  key={item.label}
+                  to={item.path}
+                  onClick={handleNavigate}
+                  className={({ isActive }) =>
+                    `${itemClass} ${
+                      isActive
+                        ? "bg-[#1C4D8D] text-white"
+                        : "text-[#0F2854] hover:bg-[#BDE8F5]"
+                    }`
+                  }
+                >
+                  <Icon size={15} />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            }
+
             return (
               <button
                 type="button"

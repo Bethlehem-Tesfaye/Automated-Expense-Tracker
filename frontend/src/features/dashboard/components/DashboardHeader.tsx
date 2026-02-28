@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { ChevronDown, Menu } from "lucide-react";
+import { ChevronDown, Menu, Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMyProfile } from "../../profile/hooks/useProfile";
 import { useLogout } from "../../auth/hooks/useLogout";
+import { useTheme } from "../../../lib/theme";
 
 interface DashboardHeaderProps {
   onToggleMenu?: () => void;
@@ -10,6 +11,7 @@ interface DashboardHeaderProps {
 
 function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
   const { data: profileResponse } = useMyProfile();
   const logoutMutation = useLogout();
   const profile = profileResponse?.data;
@@ -35,6 +37,16 @@ function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
       </button>
 
       <div className="ml-auto flex items-center justify-end gap-4">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#BDE8F5] bg-[#F3F8FF] text-[#1C4D8D] transition-colors hover:bg-[#EAF3FF] hover:text-[#0F2854]"
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          title={isDark ? "Light mode" : "Dark mode"}
+        >
+          {isDark ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
+
         <div className="relative">
           <button
             type="button"

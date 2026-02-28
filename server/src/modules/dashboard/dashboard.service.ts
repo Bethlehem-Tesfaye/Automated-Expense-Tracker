@@ -18,7 +18,15 @@ const CATEGORY_COLORS = [
   "#8B5CF6"
 ];
 
-const formatCurrency = (amount: number) => `$${amount.toLocaleString("en-US")}`;
+const formatCurrency = (amount: number, currencyCode: string) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: ["USD", "EUR", "GBP", "KES", "ETB"].includes(currencyCode)
+      ? currencyCode
+      : "ETB",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount);
 
 const formatPercent = (value: number) => {
   const rounded = Number(value.toFixed(1));
@@ -223,6 +231,7 @@ export const getDashboardOverview = async (
 
   const monthlyBudget = Number(profile?.monthlyBudget ?? 0);
   const monthlyIncome = Number(profile?.monthlyIncome ?? 0);
+  const currencyCode = profile?.defaultCurrency ?? "ETB";
 
   const budgetRemaining = monthlyBudget - currentSpending;
   const budgetUsedPercent =
@@ -244,14 +253,14 @@ export const getDashboardOverview = async (
     stats: [
       {
         title: "Total Spending",
-        value: formatCurrency(currentSpending),
+        value: formatCurrency(currentSpending, currencyCode),
         trend: `${totalChange >= 0 ? "+" : ""}${formatPercent(totalChange)}% from last month`,
         description: "Current month's total expenses",
         trendTone: trendToneFromDelta(totalChange)
       },
       {
         title: "Budget Remaining",
-        value: formatCurrency(Math.max(budgetRemaining, 0)),
+        value: formatCurrency(Math.max(budgetRemaining, 0), currencyCode),
         trend: `${formatPercent(budgetUsedPercent)}% used this month`,
         description:
           monthlyBudget > 0

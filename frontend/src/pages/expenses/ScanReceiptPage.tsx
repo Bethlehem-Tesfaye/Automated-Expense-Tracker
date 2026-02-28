@@ -14,6 +14,7 @@ import {
 } from "../../features/expenses/hooks/useExpenses";
 import { useProcessReceipt } from "../../features/receipt/hooks/useReceipt";
 import { useCreateCategory } from "../../features/categories/hooks/useCategories";
+import { useMySettings } from "../../features/settings/hooks/useSettings";
 
 function ScanReceiptPage() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -27,6 +28,7 @@ function ScanReceiptPage() {
   const processReceiptMutation = useProcessReceipt();
   const createExpenseMutation = useCreateExpense();
   const createCategoryMutation = useCreateCategory();
+  const { data: settingsResponse } = useMySettings();
   const { data: categoriesResponse, isLoading: isCategoriesLoading } =
     useExpenseCategories();
 
@@ -44,6 +46,11 @@ function ScanReceiptPage() {
       URL.revokeObjectURL(localPreviewUrl);
     };
   }, [localPreviewUrl]);
+
+  useEffect(() => {
+    if (!settingsResponse?.data) return;
+    setUseProEngine(settingsResponse.data.defaultReceiptEngine === "pro");
+  }, [settingsResponse]);
 
   const processSelectedFile = async (file: File) => {
     const response = await processReceiptMutation.mutateAsync({

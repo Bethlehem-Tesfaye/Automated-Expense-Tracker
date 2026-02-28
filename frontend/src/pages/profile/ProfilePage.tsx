@@ -7,10 +7,12 @@ import {
   useMyProfile,
   useUpdateMyProfile,
 } from "../../features/profile/hooks/useProfile";
+import { useCurrencyFormatter } from "../../features/settings/hooks/useSettings";
 
 function ProfilePage() {
   const navigate = useNavigate();
   const { data: profileResponse, isLoading } = useMyProfile();
+  const { currencySymbol } = useCurrencyFormatter();
   const updateProfileMutation = useUpdateMyProfile();
 
   const profile = profileResponse?.data;
@@ -208,8 +210,8 @@ function ProfilePage() {
                       Monthly Budget
                     </span>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-4 font-medium text-gray-500">
-                        $
+                      <span className="absolute inset-y-0 left-0 flex items-center   justify-center pl-1  font-medium text-gray-500">
+                        {currencySymbol}
                       </span>
                       <input
                         type="number"
@@ -231,8 +233,8 @@ function ProfilePage() {
                       Monthly Income
                     </span>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-4 font-medium text-gray-500">
-                        $
+                      <span className="absolute inset-y-0 left-0 flex items-center  justify-center pl-1 font-medium text-gray-500">
+                        {currencySymbol}
                       </span>
                       <input
                         type="number"

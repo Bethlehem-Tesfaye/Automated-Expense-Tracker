@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCurrencyFormatter } from "../../settings/hooks/useSettings";
 import type { WeeklySpendingData } from "../types/dashboard";
 
 interface WeeklyOverviewCardProps {
@@ -6,6 +7,7 @@ interface WeeklyOverviewCardProps {
 }
 
 function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
+  const { formatMoney, formatCompactMoney } = useCurrencyFormatter();
   const [hoveredPoint, setHoveredPoint] = useState<{
     day: string;
     amount: number;
@@ -79,7 +81,7 @@ function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
                 fontSize="11"
                 fill="#1C4D8D"
               >
-                {Math.round(tick.value)}
+                {formatCompactMoney(tick.value)}
               </text>
             </g>
           ))}
@@ -111,7 +113,7 @@ function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
                 fontWeight="600"
                 fill="#FFFFFF"
               >
-                {`${hoveredPoint.day}: $${hoveredPoint.amount}`}
+                {`${hoveredPoint.day}: ${formatMoney(hoveredPoint.amount)}`}
               </text>
             </g>
           )}
