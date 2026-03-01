@@ -108,3 +108,14 @@ Frontend (`frontend/package.json`):
 
 - Default profile currency is ETB.
 - Support admin UI is shown only to users allowed by `SUPPORT_ADMIN_EMAILS` on the backend.
+
+## Deploying backend on Render
+
+For the backend service, configure Render with:
+
+- **Root Directory**: `server`
+- **Build Command**: `npm install && npm run build`
+- **Pre-Deploy Command** (optional): `npx prisma migrate deploy`
+- **Start Command**: `npm start`
+
+The backend uses an npm `prestart` hook (`npm run build`), so `dist/server.js` is generated before startup.
