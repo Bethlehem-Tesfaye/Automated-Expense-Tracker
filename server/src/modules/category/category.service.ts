@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import CustomError from "../../lib/errors";
 import type {
@@ -11,16 +11,38 @@ import type {
 
 export const addCategory = async ({ userId, name }: AddCategoryInput) => {
   const existing = await prisma.category.findFirst({
-    where: { name, userId, deletedAt: null }
+    where: { name, userId }
   });
 
-  if (existing) throw new CustomError("Category already exists", 409);
+  if (existing && existing.deletedAt === null) {
+    throw new CustomError("Category already exists", 409);
+  }
 
-  const category = await prisma.category.create({
-    data: { name, userId }
-  });
+  if (existing && existing.deletedAt !== null) {
+    const restoredCategory = await prisma.category.update({
+      where: { id: existing.id },
+      data: { deletedAt: null }
+    });
 
-  return { data: category };
+    return { data: restoredCategory };
+  }
+
+  try {
+    const category = await prisma.category.create({
+      data: { name, userId }
+    });
+
+    return { data: category };
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new CustomError("Category already exists", 409);
+    }
+
+    throw error;
+  }
 };
 
 export const getCategory = async ({
@@ -74,10 +96,23 @@ export const updateCategory = async ({
 
   if (!existing) throw new CustomError("Category not found", 404);
 
-  const updated = await prisma.category.update({
-    where: { id },
-    data: { name }
-  });
+  let updated;
+
+  try {
+    updated = await prisma.category.update({
+      where: { id },
+      data: { name }
+    });
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new CustomError("Category already exists", 409);
+    }
+
+    throw error;
+  }
 
   return { data: updated };
 };
