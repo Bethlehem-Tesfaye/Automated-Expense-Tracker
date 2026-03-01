@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.router = void 0;
+const express_1 = __importDefault(require("express"));
+const expense_routes_1 = require("../modules/expense/expense.routes");
+const category_routes_1 = require("../modules/category/category.routes");
+const dashboard_routes_1 = require("../modules/dashboard/dashboard.routes");
+const profile_routes_1 = require("../modules/profile/profile.routes");
+const receipt_routes_1 = require("../modules/receipt/receipt.routes");
+const settings_routes_1 = require("../modules/settings/settings.routes");
+const support_routes_1 = require("../modules/support/support.routes");
+exports.router = express_1.default.Router();
+exports.router.use("/expenses", expense_routes_1.expenseRouter);
+exports.router.use("/categories", category_routes_1.categoryRouter);
+exports.router.use("/dashboard", dashboard_routes_1.dashboardRouter);
+exports.router.use("/profile", profile_routes_1.profileRouter);
+exports.router.use("/receipt", receipt_routes_1.receiptRouter);
+exports.router.use("/settings", settings_routes_1.settingsRouter);
+exports.router.use("/support", support_routes_1.supportRouter);

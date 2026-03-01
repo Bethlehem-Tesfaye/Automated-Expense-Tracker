@@ -114,8 +114,17 @@ Frontend (`frontend/package.json`):
 For the backend service, configure Render with:
 
 - **Root Directory**: `server`
-- **Build Command**: `npm install && npm run build`
+- **Build Command**: `npm install --production`
 - **Pre-Deploy Command** (optional): `npx prisma migrate deploy`
-- **Start Command**: `npm start`
+- **Start Command**: `node dist/server.js`
 
-The backend uses an npm `prestart` hook (`npm run build`), so `dist/server.js` is generated before startup.
+For Render free-tier memory limits, prebuild backend artifacts locally and commit them:
+
+```bash
+cd server
+npm install --include=dev
+npx prisma generate
+npm run build
+```
+
+Then commit and push the generated `server/dist` folder so Render can run compiled JavaScript directly without TypeScript compilation during deploy.
