@@ -1,12 +1,84 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processReceipt = void 0;
+exports.processReceipt = exports.getProReceiptUsage = void 0;
 const gemini_1 = require("../../lib/gemini");
 const veryfi_1 = require("../../lib/veryfi");
 const ocr_1 = require("../../lib/ocr");
 const upload_1 = require("../../middleware/upload");
 const prisma_1 = require("../../lib/prisma");
 const logger_1 = require("../../config/logger");
+const errors_1 = __importDefault(require("../../lib/errors"));
+const types_1 = require("./types");
+const currentMonthKey = () => new Date().toISOString().slice(0, 7);
+const toUsageInfo = (used, month) => ({
+    used,
+    limit: types_1.PRO_RECEIPT_MONTHLY_LIMIT,
+    remaining: Math.max(types_1.PRO_RECEIPT_MONTHLY_LIMIT - used, 0),
+    month,
+    reached: used >= types_1.PRO_RECEIPT_MONTHLY_LIMIT
+});
+const getCurrentUsage = async (userId) => {
+    const month = currentMonthKey();
+    const profile = await prisma_1.prisma.profile.upsert({
+        where: { userId },
+        create: { userId, proReceiptUsageCount: 0, proReceiptUsageMonth: month },
+        update: {},
+        select: { id: true, proReceiptUsageCount: true, proReceiptUsageMonth: true }
+    });
+    if (profile.proReceiptUsageMonth !== month) {
+        const reset = await prisma_1.prisma.profile.update({
+            where: { id: profile.id },
+            data: {
+                proReceiptUsageMonth: month,
+                proReceiptUsageCount: 0
+            },
+            select: { proReceiptUsageCount: true }
+        });
+        return toUsageInfo(reset.proReceiptUsageCount, month);
+    }
+    return toUsageInfo(profile.proReceiptUsageCount, month);
+};
+const consumeProUsage = async (userId) => {
+    const month = currentMonthKey();
+    const usage = await prisma_1.prisma.$transaction(async (tx) => {
+        const profile = await tx.profile.upsert({
+            where: { userId },
+            create: {
+                userId,
+                proReceiptUsageMonth: month,
+                proReceiptUsageCount: 0
+            },
+            update: {},
+            select: {
+                id: true,
+                proReceiptUsageCount: true,
+                proReceiptUsageMonth: true
+            }
+        });
+        const countInMonth = profile.proReceiptUsageMonth === month ? profile.proReceiptUsageCount : 0;
+        if (countInMonth >= types_1.PRO_RECEIPT_MONTHLY_LIMIT) {
+            throw new errors_1.default("Out of Pro engine limit for this month", 429);
+        }
+        const updated = await tx.profile.update({
+            where: { id: profile.id },
+            data: {
+                proReceiptUsageMonth: month,
+                proReceiptUsageCount: countInMonth + 1
+            },
+            select: { proReceiptUsageCount: true }
+        });
+        return updated.proReceiptUsageCount;
+    });
+    return toUsageInfo(usage, month);
+};
+const getProReceiptUsage = async (userId) => {
+    const data = await getCurrentUsage(userId);
+    return { data };
+};
+exports.getProReceiptUsage = getProReceiptUsage;
 const toIsoDate = (value) => {
     const ymd = value.match(/^(\d{4})[-\/](\d{2})[-\/](\d{2})$/);
     if (ymd) {
@@ -82,22 +154,47 @@ const normalizeParsedReceipt = (parsed, rawText) => {
         category
     };
 };
+const BASIC_RECEIPT_ERROR_MESSAGE = "Please upload a clear receipt image. The uploaded file may not be a receipt.";
+const looksLikeReceiptText = (rawText) => {
+    const source = rawText.toLowerCase();
+    return /(receipt|total|subtotal|tax|vat|merchant|invoice|cash|card|amount)/.test(source);
+};
+const validateBasicParsedReceipt = (parsed, rawText) => {
+    const hasRequiredFields = Boolean(parsed?.merchant?.trim()) &&
+        typeof parsed?.amount === "number" &&
+        Number.isFinite(parsed.amount) &&
+        parsed.amount > 0 &&
+        Boolean(parsed?.date) &&
+        Boolean(parsed?.category?.trim());
+    const hasReceiptSignals = rawText.trim().length >= 20 && looksLikeReceiptText(rawText);
+    if (!hasRequiredFields || !hasReceiptSignals) {
+        throw new errors_1.default(BASIC_RECEIPT_ERROR_MESSAGE, 422);
+    }
+};
 const processReceipt = async ({ file, userId, engine }) => {
-    const imageUrl = await (0, upload_1.uploadImageToCloudinary)(file, "receipts", userId);
-    const candidateCategories = userId
+    const effectiveUserId = userId;
+    if (!effectiveUserId) {
+        throw new errors_1.default("Unauthorized", 401);
+    }
+    const proUsage = engine === "pro"
+        ? await consumeProUsage(effectiveUserId)
+        : await getCurrentUsage(effectiveUserId);
+    const candidateCategories = effectiveUserId
         ? (await prisma_1.prisma.category.findMany({
-            where: { userId, deletedAt: null },
+            where: { userId: effectiveUserId, deletedAt: null },
             select: { name: true }
         })).map((category) => category.name)
         : [];
     if (engine === "pro") {
+        const imageUrl = await (0, upload_1.uploadImageToCloudinary)(file, "receipts", userId);
         try {
             const parsedWithVeryfi = await (0, veryfi_1.parseReceiptWithVeryfi)(file, candidateCategories);
             return {
                 success: true,
                 data: parsedWithVeryfi,
                 rawText: "",
-                imageUrl
+                imageUrl,
+                proUsage
             };
         }
         catch (error) {
@@ -108,7 +205,8 @@ const processReceipt = async ({ file, userId, engine }) => {
                 success: true,
                 data: parsedWithFallback,
                 rawText,
-                imageUrl
+                imageUrl,
+                proUsage
             };
         }
     }
@@ -124,11 +222,14 @@ const processReceipt = async ({ file, userId, engine }) => {
         parsed = fallbackParseReceipt(rawText);
     }
     parsed = normalizeParsedReceipt(parsed, rawText);
+    validateBasicParsedReceipt(parsed, rawText);
+    const imageUrl = await (0, upload_1.uploadImageToCloudinary)(file, "receipts", userId);
     return {
         success: true,
         data: parsed,
         rawText,
-        imageUrl
+        imageUrl,
+        proUsage
     };
 };
 exports.processReceipt = processReceipt;

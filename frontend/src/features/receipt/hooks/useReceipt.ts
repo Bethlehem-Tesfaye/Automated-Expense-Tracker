@@ -1,7 +1,24 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { api } from "../../../lib/axios";
-import type { ReceiptEngine, ReceiptProcessResponse } from "../types/receipt";
+import type {
+  ProUsageResponse,
+  ReceiptEngine,
+  ReceiptProcessResponse,
+} from "../types/receipt";
+
+export const useProReceiptUsage = () => {
+  return useQuery({
+    queryKey: ["receipt", "pro-usage"],
+    queryFn: async () => {
+      const response = await api.get<ProUsageResponse>(
+        "/api/receipt/pro-usage",
+      );
+      return response.data;
+    },
+  });
+};
 
 export const useProcessReceipt = () => {
   return useMutation({
@@ -29,7 +46,9 @@ export const useProcessReceipt = () => {
       return response.data;
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to process receipt");
+      const axiosError = error as AxiosError<{ message?: string }>;
+      const message = axiosError.response?.data?.message;
+      toast.error(message || error.message || "Failed to process receipt");
     },
   });
 };

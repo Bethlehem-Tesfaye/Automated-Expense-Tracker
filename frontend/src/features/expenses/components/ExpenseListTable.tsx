@@ -1,4 +1,5 @@
 import { Pencil, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useCurrencyFormatter } from "../../settings/hooks/useSettings";
 import type { ExpenseItem } from "../types/expenses";
 
@@ -43,7 +44,23 @@ function ExpenseListTable({
           {expenses.length === 0 && (
             <tr>
               <td colSpan={5} className="px-5 py-10 text-center text-[#4988C4]">
-                No expenses found.
+                <div className="flex flex-col items-center gap-3">
+                  <p>No expenses found.</p>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    <Link
+                      to="/expenses/add"
+                      className="inline-flex h-9 items-center rounded-md bg-[#1C4D8D] px-3 text-xs font-semibold text-white"
+                    >
+                      Add Expense
+                    </Link>
+                    <Link
+                      to="/expenses/scan"
+                      className="inline-flex h-9 items-center rounded-md border border-[#1C4D8D] px-3 text-xs font-semibold text-[#1C4D8D]"
+                    >
+                      Upload Receipt
+                    </Link>
+                  </div>
+                </div>
               </td>
             </tr>
           )}

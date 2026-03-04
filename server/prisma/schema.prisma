@@ -96,6 +96,8 @@ model Profile {
   monthlyBudget        Float?
   monthlyIncome        Float?
   defaultReceiptEngine String   @default("basic")
+  proReceiptUsageCount Int      @default(0)
+  proReceiptUsageMonth String?
   defaultCurrency      String   @default("ETB")
   emailNotifications   Boolean  @default(true)
   createdAt            DateTime @default(now())

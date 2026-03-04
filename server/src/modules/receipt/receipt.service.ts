@@ -4,7 +4,95 @@ import { extractTextFromBuffer } from "../../lib/ocr";
 import { uploadImageToCloudinary } from "../../middleware/upload";
 import { prisma } from "../../lib/prisma";
 import { logger } from "../../config/logger";
-import type { ProcessReceiptInput, ProcessReceiptResult } from "./types";
+import CustomError from "../../lib/errors";
+import {
+  PRO_RECEIPT_MONTHLY_LIMIT,
+  type ProcessReceiptInput,
+  type ProcessReceiptResult,
+  type ProUsageInfo
+} from "./types";
+
+const currentMonthKey = () => new Date().toISOString().slice(0, 7);
+
+const toUsageInfo = (used: number, month: string): ProUsageInfo => ({
+  used,
+  limit: PRO_RECEIPT_MONTHLY_LIMIT,
+  remaining: Math.max(PRO_RECEIPT_MONTHLY_LIMIT - used, 0),
+  month,
+  reached: used >= PRO_RECEIPT_MONTHLY_LIMIT
+});
+
+const getCurrentUsage = async (userId: string): Promise<ProUsageInfo> => {
+  const month = currentMonthKey();
+
+  const profile = await prisma.profile.upsert({
+    where: { userId },
+    create: { userId, proReceiptUsageCount: 0, proReceiptUsageMonth: month },
+    update: {},
+    select: { id: true, proReceiptUsageCount: true, proReceiptUsageMonth: true }
+  });
+
+  if (profile.proReceiptUsageMonth !== month) {
+    const reset = await prisma.profile.update({
+      where: { id: profile.id },
+      data: {
+        proReceiptUsageMonth: month,
+        proReceiptUsageCount: 0
+      },
+      select: { proReceiptUsageCount: true }
+    });
+
+    return toUsageInfo(reset.proReceiptUsageCount, month);
+  }
+
+  return toUsageInfo(profile.proReceiptUsageCount, month);
+};
+
+const consumeProUsage = async (userId: string): Promise<ProUsageInfo> => {
+  const month = currentMonthKey();
+
+  const usage = await prisma.$transaction(async (tx) => {
+    const profile = await tx.profile.upsert({
+      where: { userId },
+      create: {
+        userId,
+        proReceiptUsageMonth: month,
+        proReceiptUsageCount: 0
+      },
+      update: {},
+      select: {
+        id: true,
+        proReceiptUsageCount: true,
+        proReceiptUsageMonth: true
+      }
+    });
+
+    const countInMonth =
+      profile.proReceiptUsageMonth === month ? profile.proReceiptUsageCount : 0;
+
+    if (countInMonth >= PRO_RECEIPT_MONTHLY_LIMIT) {
+      throw new CustomError("Out of Pro engine limit for this month", 429);
+    }
+
+    const updated = await tx.profile.update({
+      where: { id: profile.id },
+      data: {
+        proReceiptUsageMonth: month,
+        proReceiptUsageCount: countInMonth + 1
+      },
+      select: { proReceiptUsageCount: true }
+    });
+
+    return updated.proReceiptUsageCount;
+  });
+
+  return toUsageInfo(usage, month);
+};
+
+export const getProReceiptUsage = async (userId: string) => {
+  const data = await getCurrentUsage(userId);
+  return { data };
+};
 
 const toIsoDate = (value: string): string | null => {
   const ymd = value.match(/^(\d{4})[-\/](\d{2})[-\/](\d{2})$/);
@@ -108,23 +196,64 @@ const normalizeParsedReceipt = (
   };
 };
 
+const BASIC_RECEIPT_ERROR_MESSAGE =
+  "Please upload a clear receipt image. The uploaded file may not be a receipt.";
+
+const looksLikeReceiptText = (rawText: string) => {
+  const source = rawText.toLowerCase();
+  return /(receipt|total|subtotal|tax|vat|merchant|invoice|cash|card|amount)/.test(
+    source
+  );
+};
+
+const validateBasicParsedReceipt = (
+  parsed: ParsedReceipt | null,
+  rawText: string
+) => {
+  const hasRequiredFields =
+    Boolean(parsed?.merchant?.trim()) &&
+    typeof parsed?.amount === "number" &&
+    Number.isFinite(parsed.amount) &&
+    parsed.amount > 0 &&
+    Boolean(parsed?.date) &&
+    Boolean(parsed?.category?.trim());
+
+  const hasReceiptSignals =
+    rawText.trim().length >= 20 && looksLikeReceiptText(rawText);
+
+  if (!hasRequiredFields || !hasReceiptSignals) {
+    throw new CustomError(BASIC_RECEIPT_ERROR_MESSAGE, 422);
+  }
+};
+
 export const processReceipt = async ({
   file,
   userId,
   engine
 }: ProcessReceiptInput): Promise<ProcessReceiptResult> => {
-  const imageUrl = await uploadImageToCloudinary(file, "receipts", userId);
+  const effectiveUserId = userId;
 
-  const candidateCategories = userId
+  if (!effectiveUserId) {
+    throw new CustomError("Unauthorized", 401);
+  }
+
+  const proUsage =
+    engine === "pro"
+      ? await consumeProUsage(effectiveUserId)
+      : await getCurrentUsage(effectiveUserId);
+
+  const candidateCategories = effectiveUserId
     ? (
         await prisma.category.findMany({
-          where: { userId, deletedAt: null },
+          where: { userId: effectiveUserId, deletedAt: null },
           select: { name: true }
         })
       ).map((category) => category.name)
     : [];
 
   if (engine === "pro") {
+    const imageUrl = await uploadImageToCloudinary(file, "receipts", userId);
+
     try {
       const parsedWithVeryfi = await parseReceiptWithVeryfi(
         file,
@@ -135,7 +264,8 @@ export const processReceipt = async ({
         success: true,
         data: parsedWithVeryfi,
         rawText: "",
-        imageUrl
+        imageUrl,
+        proUsage
       };
     } catch (error) {
       logger.warn(
@@ -153,7 +283,8 @@ export const processReceipt = async ({
         success: true,
         data: parsedWithFallback,
         rawText,
-        imageUrl
+        imageUrl,
+        proUsage
       };
     }
   }
@@ -172,11 +303,15 @@ export const processReceipt = async ({
   }
 
   parsed = normalizeParsedReceipt(parsed, rawText);
+  validateBasicParsedReceipt(parsed, rawText);
+
+  const imageUrl = await uploadImageToCloudinary(file, "receipts", userId);
 
   return {
     success: true,
     data: parsed,
     rawText,
-    imageUrl
+    imageUrl,
+    proUsage
   };
 };

@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react";
 import { useExpenseReport } from "../../features/reports/hooks/useReports";
 import { useCurrencyFormatter } from "../../features/settings/hooks/useSettings";
+import {
+  exportReportToCsv,
+  exportReportToExcel,
+} from "../../features/reports/utils/exportReport";
 import type {
   ExpenseReportQuery,
   ReportPeriod,
@@ -8,6 +12,7 @@ import type {
 
 function ReportsPage() {
   const { formatMoney } = useCurrencyFormatter();
+  const [exportFormat, setExportFormat] = useState("");
   const [period, setPeriod] = useState<ReportPeriod>("week");
   const [date, setDate] = useState("");
   const [month, setMonth] = useState("");
@@ -41,6 +46,42 @@ function ReportsPage() {
   const { data: reportResponse, isLoading, isError } = useExpenseReport(query);
   const report = reportResponse?.data;
 
+  const handleExportCsv = () => {
+    if (!report) return;
+
+    exportReportToCsv({
+      report,
+      period: report.period,
+      from: report.from,
+      to: report.to,
+    });
+  };
+
+  const handleExportExcel = () => {
+    if (!report) return;
+
+    exportReportToExcel({
+      report,
+      period: report.period,
+      from: report.from,
+      to: report.to,
+    });
+  };
+
+  const handleExportChange = (value: string) => {
+    setExportFormat(value);
+
+    if (value === "csv") {
+      handleExportCsv();
+    }
+
+    if (value === "excel") {
+      handleExportExcel();
+    }
+
+    setExportFormat("");
+  };
+
   return (
     <div className="space-y-5">
       <section>
@@ -52,6 +93,19 @@ function ReportsPage() {
       </section>
 
       <section className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+        <div className="mb-4 flex justify-end">
+          <select
+            value={exportFormat}
+            onChange={(event) => handleExportChange(event.target.value)}
+            disabled={!report || isLoading}
+            className="h-10 min-w-44 rounded-md border border-[#1C4D8D] px-3 text-sm font-semibold text-[#1C4D8D] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <option value="">Export</option>
+            <option value="csv">Export CSV</option>
+            <option value="excel">Export Excel</option>
+          </select>
+        </div>
+
         <div className="grid gap-4 md:grid-cols-5">
           <label className="space-y-1.5">
             <span className="text-xs font-semibold text-[#1C4D8D]">Period</span>

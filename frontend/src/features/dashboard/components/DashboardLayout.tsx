@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
 import OverviewCards from "./OverviewCards";
@@ -17,6 +18,11 @@ function DashboardLayout() {
 
   const { stats, categorySpending, monthlySpending, weeklySpending } =
     data ?? emptyDashboardData;
+
+  const hasAnyExpenses =
+    categorySpending.length > 0 ||
+    monthlySpending.some((item) => item.amount > 0) ||
+    weeklySpending.some((item) => item.amount > 0);
 
   return (
     <div className="h-screen overflow-hidden bg-white text-[#0F2854]">
@@ -57,6 +63,29 @@ function DashboardLayout() {
                     Expense Overview
                   </h1>
                 </section>
+
+                {!hasAnyExpenses && (
+                  <section className="rounded-xl border border-[#BDE8F5] bg-white p-5">
+                    <p className="text-sm text-[#1C4D8D]">
+                      No expenses yet. Upload a receipt or add your first
+                      expense.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <Link
+                        to="/expenses/scan"
+                        className="inline-flex h-10 items-center rounded-md border border-[#1C4D8D] px-4 text-sm font-semibold text-[#1C4D8D]"
+                      >
+                        Upload Receipt
+                      </Link>
+                      <Link
+                        to="/expenses/add"
+                        className="inline-flex h-10 items-center rounded-md bg-[#1C4D8D] px-4 text-sm font-semibold text-white"
+                      >
+                        Add Expense
+                      </Link>
+                    </div>
+                  </section>
+                )}
 
                 <OverviewCards items={stats} />
 
