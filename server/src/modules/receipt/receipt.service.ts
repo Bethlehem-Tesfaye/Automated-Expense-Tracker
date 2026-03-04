@@ -196,36 +196,6 @@ const normalizeParsedReceipt = (
   };
 };
 
-const BASIC_RECEIPT_ERROR_MESSAGE =
-  "Please upload a clear receipt image. The uploaded file may not be a receipt.";
-
-const looksLikeReceiptText = (rawText: string) => {
-  const source = rawText.toLowerCase();
-  return /(receipt|total|subtotal|tax|vat|merchant|invoice|cash|card|amount)/.test(
-    source
-  );
-};
-
-const validateBasicParsedReceipt = (
-  parsed: ParsedReceipt | null,
-  rawText: string
-) => {
-  const hasRequiredFields =
-    Boolean(parsed?.merchant?.trim()) &&
-    typeof parsed?.amount === "number" &&
-    Number.isFinite(parsed.amount) &&
-    parsed.amount > 0 &&
-    Boolean(parsed?.date) &&
-    Boolean(parsed?.category?.trim());
-
-  const hasReceiptSignals =
-    rawText.trim().length >= 20 && looksLikeReceiptText(rawText);
-
-  if (!hasRequiredFields || !hasReceiptSignals) {
-    throw new CustomError(BASIC_RECEIPT_ERROR_MESSAGE, 422);
-  }
-};
-
 export const processReceipt = async ({
   file,
   userId,
@@ -290,6 +260,14 @@ export const processReceipt = async ({
   }
 
   const rawText = await extractTextFromBuffer(file.buffer);
+  logger.info(
+    {
+      engine: "basic",
+      userId: effectiveUserId,
+      ocrText: rawText
+    },
+    "Basic OCR extracted text"
+  );
   let parsed: ParsedReceipt | null = null;
 
   try {
@@ -303,7 +281,6 @@ export const processReceipt = async ({
   }
 
   parsed = normalizeParsedReceipt(parsed, rawText);
-  validateBasicParsedReceipt(parsed, rawText);
 
   const imageUrl = await uploadImageToCloudinary(file, "receipts", userId);
 
