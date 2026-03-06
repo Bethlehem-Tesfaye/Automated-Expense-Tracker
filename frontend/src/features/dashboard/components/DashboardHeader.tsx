@@ -51,6 +51,7 @@ function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
           <button
             type="button"
             onClick={() => setIsProfileMenuOpen((current) => !current)}
+            data-tour-id="profile-icon"
             className="flex items-center gap-2 rounded-md px-1.5 py-1 transition-colors hover:bg-[#F3F8FF]"
           >
             {avatarUrl ? (

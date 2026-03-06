@@ -7,7 +7,7 @@ import type { RegistrationFormFields } from "../types/auth";
 
 const RegistrationForm: React.FC = () => {
   const { register, isLoading } = useRegister();
-  const signInWithGoogle = useGoogleAuth();
+  const signInWithGoogle = useGoogleAuth("register");
   const [form, setForm] = useState<RegistrationFormFields>({
     name: "",
     email: "",

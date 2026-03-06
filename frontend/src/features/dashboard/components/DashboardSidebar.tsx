@@ -76,6 +76,9 @@ function DashboardSidebar({
                   <NavLink
                     to={item.path}
                     onClick={handleNavigate}
+                    data-tour-id={
+                      item.label === "Reports" ? "reports-link" : undefined
+                    }
                     className={({ isActive }) => {
                       const isParentActive =
                         item.label === "Expenses"
@@ -100,6 +103,7 @@ function DashboardSidebar({
                       <NavLink
                         to="/expenses/scan"
                         onClick={handleNavigate}
+                        data-tour-id="scan-receipt-link"
                         className={({ isActive }) =>
                           `relative flex h-8 items-center rounded-md px-2 pl-4 text-xs font-medium before:absolute before:-left-3 before:top-1/2 before:h-px before:w-2 before:-translate-y-1/2 before:bg-[#94A3B8] ${
                             isActive
@@ -113,6 +117,7 @@ function DashboardSidebar({
                       <NavLink
                         to="/expenses/add"
                         onClick={handleNavigate}
+                        data-tour-id="add-expense-link"
                         className={({ isActive }) =>
                           `relative flex h-8 items-center rounded-md px-2 pl-4 text-xs font-medium before:absolute before:-left-3 before:top-1/2 before:h-px before:w-2 before:-translate-y-1/2 before:bg-[#94A3B8] ${
                             isActive

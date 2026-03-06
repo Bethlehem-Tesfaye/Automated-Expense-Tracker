@@ -7,7 +7,7 @@ import type { LoginFormFields } from "../types/auth";
 
 const LoginForm: React.FC = () => {
   const { login, isLoading } = useLogin();
-  const signInWithGoogle = useGoogleAuth();
+  const signInWithGoogle = useGoogleAuth("login");
   const [form, setForm] = useState<LoginFormFields>({
     email: "",
     password: "",
