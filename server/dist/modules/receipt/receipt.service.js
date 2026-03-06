@@ -81,9 +81,8 @@ const getProReceiptUsage = async (userId) => {
 exports.getProReceiptUsage = getProReceiptUsage;
 const toIsoDate = (value) => {
     const ymd = value.match(/^(\d{4})[-\/](\d{2})[-\/](\d{2})$/);
-    if (ymd) {
+    if (ymd)
         return `${ymd[1]}-${ymd[2]}-${ymd[3]}`;
-    }
     const mdy = value.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
     if (mdy) {
         const month = mdy[1].padStart(2, "0");
@@ -113,27 +112,24 @@ const fallbackParseReceipt = (text) => {
         date,
         category: "Other"
     };
-    if (!parsed.merchant && !parsed.amount && !parsed.date) {
+    if (!parsed.merchant && !parsed.amount && !parsed.date)
         return null;
-    }
     return parsed;
 };
+// 🔥 Stricter keyword-based category override
 const guessCategoryFromText = (text) => {
     const source = text.toLowerCase();
-    if (/(brake|pedal|repair|garage|auto|car|bike|fuel|gas)/.test(source)) {
-        return "Transport";
-    }
-    if (/(grocery|restaurant|cafe|food|meal|snack|drink)/.test(source)) {
-        return "Food";
-    }
-    if (/(netflix|spotify|subscription|plan|membership)/.test(source)) {
-        return "Subscriptions";
-    }
-    if (/(electric|water|internet|phone|utility|bill)/.test(source)) {
-        return "Utilities";
-    }
-    if (/(movie|cinema|concert|game|entertainment)/.test(source)) {
-        return "Entertainment";
+    // Optional Extra Safety: only match if the keyword is not part of an address or header
+    const keywords = {
+        Transport: /(brake|pedal|repair|garage|auto|car|bike|fuel|gas)/,
+        Food: /(grocery|restaurant|cafe|food|meal|snack|drink|tea|coffee|salad|cake|pizza|burger|sandwich|bakery)/,
+        Subscriptions: /(netflix|spotify|subscription|plan|membership)/,
+        Utilities: /(electric|water|internet|phone|utility|bill)/,
+        Entertainment: /(movie|cinema|concert|game|entertainment)/
+    };
+    for (const [category, regex] of Object.entries(keywords)) {
+        if (regex.test(source))
+            return category;
     }
     return null;
 };
@@ -144,9 +140,8 @@ const normalizeParsedReceipt = (parsed, rawText) => {
         ? (toIsoDate(parsed.date) ?? parsed.date)
         : null;
     const normalizedCategory = parsed.category?.trim() || null;
-    const category = !normalizedCategory || /^other$/i.test(normalizedCategory)
-        ? (guessCategoryFromText(rawText) ?? normalizedCategory ?? "Other")
-        : normalizedCategory;
+    // Keyword override takes precedence
+    const category = guessCategoryFromText(rawText) ?? normalizedCategory ?? "Other";
     return {
         merchant: parsed.merchant?.trim() || null,
         amount: parsed.amount,
@@ -154,11 +149,57 @@ const normalizeParsedReceipt = (parsed, rawText) => {
         category
     };
 };
+const NO_FIELDS_EXTRACTED_MESSAGE = "No fields could be extracted. Please upload a clear receipt image or a valid receipt.";
+const NOT_RECEIPT_MESSAGE = "The uploaded image does not look like a receipt. Please upload a valid receipt image.";
+const BLURRY_RECEIPT_MESSAGE = "The receipt image is too blurry to read. Please upload a clearer receipt image.";
+const ensureHasExtractedFields = (parsed) => {
+    if (!parsed) {
+        throw new errors_1.default(NO_FIELDS_EXTRACTED_MESSAGE, 422);
+    }
+    const hasMerchant = Boolean(parsed.merchant?.trim());
+    const hasAmount = typeof parsed.amount === "number" && Number.isFinite(parsed.amount);
+    const hasDate = Boolean(parsed.date);
+    const hasCategory = Boolean(parsed.category?.trim()) &&
+        parsed.category?.trim().toLowerCase() !== "other";
+    if (!hasMerchant && !hasAmount && !hasDate && !hasCategory) {
+        throw new errors_1.default(NO_FIELDS_EXTRACTED_MESSAGE, 422);
+    }
+};
+const hasMeaningfulFields = (parsed) => {
+    if (!parsed)
+        return false;
+    const hasMerchant = Boolean(parsed.merchant?.trim());
+    const hasAmount = typeof parsed.amount === "number" && Number.isFinite(parsed.amount);
+    const hasDate = Boolean(parsed.date);
+    const hasCategory = Boolean(parsed.category?.trim()) &&
+        parsed.category?.trim().toLowerCase() !== "other";
+    return hasMerchant || hasAmount || hasDate || hasCategory;
+};
+const extractReceiptSignals = (rawText) => {
+    const source = rawText.toLowerCase();
+    const hasReceiptKeywords = /(receipt|subtotal|total|tax|vat|invoice|order|qty|item|cash|card|grand total|amount due|table no|eat in)/.test(source);
+    const amountMatches = rawText.match(/\b\d+[.,]\d{2}\b/g) ?? [];
+    const hasMoneyAmount = amountMatches.length >= 1;
+    const hasMultipleAmounts = amountMatches.length >= 2;
+    const hasDate = /\b\d{4}[-\/]\d{2}[-\/]\d{2}\b/.test(rawText) ||
+        /\b\d{1,2}[-\/]\d{1,2}[-\/]\d{4}\b/.test(rawText);
+    const hasLineItemPattern = /[A-Za-z][A-Za-z\s]{2,}\s+\d+[.,]\d{2}/.test(rawText);
+    const hasStrongReceiptSignals = (hasReceiptKeywords && hasMultipleAmounts) ||
+        (hasLineItemPattern && hasMoneyAmount) ||
+        (hasDate && hasReceiptKeywords && hasMoneyAmount);
+    return {
+        hasStrongReceiptSignals,
+        hasReceiptKeywords,
+        hasMoneyAmount,
+        hasMultipleAmounts,
+        hasDate,
+        hasLineItemPattern
+    };
+};
 const processReceipt = async ({ file, userId, engine }) => {
     const effectiveUserId = userId;
-    if (!effectiveUserId) {
+    if (!effectiveUserId)
         throw new errors_1.default("Unauthorized", 401);
-    }
     const proUsage = engine === "pro"
         ? await consumeProUsage(effectiveUserId)
         : await getCurrentUsage(effectiveUserId);
@@ -182,8 +223,9 @@ const processReceipt = async ({ file, userId, engine }) => {
         }
         catch (error) {
             logger_1.logger.warn({ err: error }, "Veryfi failed, using OCR fallback in pro mode");
-            const rawText = await (0, ocr_1.extractTextFromBuffer)(file.buffer);
+            const rawText = await (0, ocr_1.extractPlainTextFromBuffer)(file.buffer);
             const parsedWithFallback = normalizeParsedReceipt(fallbackParseReceipt(rawText), rawText);
+            ensureHasExtractedFields(parsedWithFallback);
             return {
                 success: true,
                 data: parsedWithFallback,
@@ -193,23 +235,48 @@ const processReceipt = async ({ file, userId, engine }) => {
             };
         }
     }
-    const rawText = await (0, ocr_1.extractTextFromBuffer)(file.buffer);
+    // Single OCR pass provides both plain and structured text
+    const { plainText: rawText, structuredText, averageConfidence, lineCount } = await (0, ocr_1.extractStructuredTextFromBuffer)(file.buffer);
     logger_1.logger.info({
         engine: "basic",
         userId: effectiveUserId,
-        ocrText: rawText
+        ocrPlainText: rawText,
+        ocrStructuredText: structuredText,
+        ocrAverageConfidence: averageConfidence,
+        ocrLineCount: lineCount
     }, "Basic OCR extracted text");
     let parsed = null;
     try {
-        parsed = await (0, gemini_1.parseReceiptWithGemini)(rawText, candidateCategories);
+        // Gemini sees the structured Markdown
+        parsed = await (0, gemini_1.parseReceiptWithGemini)(structuredText, candidateCategories);
     }
     catch {
         parsed = null;
     }
-    if (!parsed) {
+    if (!parsed)
         parsed = fallbackParseReceipt(rawText);
+    const receiptValidation = await (0, gemini_1.validateReceiptWithGemini)(structuredText);
+    const receiptSignals = extractReceiptSignals(rawText);
+    const extractedHasFields = hasMeaningfulFields(parsed);
+    const hasVeryLowOcrQuality = averageConfidence < 0.4 || lineCount === 0 || rawText.trim().length < 20;
+    if (receiptValidation?.isBlurry &&
+        receiptValidation.confidence >= 0.75 &&
+        !receiptSignals.hasStrongReceiptSignals) {
+        throw new errors_1.default(BLURRY_RECEIPT_MESSAGE, 422);
+    }
+    if (receiptValidation &&
+        !receiptValidation.isReceipt &&
+        receiptValidation.confidence >= 0.75 &&
+        !receiptSignals.hasStrongReceiptSignals) {
+        throw new errors_1.default(NOT_RECEIPT_MESSAGE, 422);
+    }
+    if (!receiptSignals.hasStrongReceiptSignals &&
+        !extractedHasFields &&
+        hasVeryLowOcrQuality) {
+        throw new errors_1.default(NOT_RECEIPT_MESSAGE, 422);
     }
     parsed = normalizeParsedReceipt(parsed, rawText);
+    ensureHasExtractedFields(parsed);
     const imageUrl = await (0, upload_1.uploadImageToCloudinary)(file, "receipts", userId);
     return {
         success: true,

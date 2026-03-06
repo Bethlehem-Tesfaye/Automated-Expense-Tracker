@@ -42,6 +42,9 @@ function ScanReceiptPage() {
 
   const categories = categoriesResponse?.data ?? [];
   const proUsage = proUsageResponse?.data;
+  const proLimit = proUsage?.limit ?? 10;
+  const proUsed = proUsage?.used ?? 0;
+  const proUsagePercent = Math.min(100, Math.round((proUsed / proLimit) * 100));
   const isProLimitReached = Boolean(proUsage?.reached);
   const isProcessingReceipt = processingStage !== "idle";
   const processingProgress =
@@ -231,17 +234,40 @@ function ScanReceiptPage() {
             </button>
           </div>
           <p className="mt-1 text-[11px] text-[#64748B] md:max-w-70">
-            Basic: Tesseract + Gemini. <br></br> Pro: Veryfi (higher accuracy,
-            limited scans per month).
+            {useProEngine
+              ? "Pro: Veryfi (higher accuracy, limited scans per month)."
+              : "Basic: Paddle OCR + Gemini."}
           </p>
-          <p
-            className={`mt-1 text-[11px] ${
-              isProLimitReached ? "text-red-600" : "text-[#1C4D8D]"
-            }`}
-          >
-            Pro usage this month: {proUsage?.used ?? 0}/{proUsage?.limit ?? 10}
-            {isProLimitReached ? " (Out of limit)" : ""}
-          </p>
+
+          {useProEngine && (
+            <div className="mt-2 rounded-md border border-[#BDE8F5] bg-[#F8FBFF] p-2.5 md:max-w-70">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold text-[#0F2854]">
+                  Pro usage this month
+                </span>
+                <span
+                  className={`text-[11px] font-semibold ${
+                    isProLimitReached ? "text-red-600" : "text-[#1C4D8D]"
+                  }`}
+                >
+                  {proUsed}/{proLimit}
+                </span>
+              </div>
+              <div className="mt-1.5 h-1.5 w-full rounded-full bg-[#EAF3FF]">
+                <div
+                  className={`h-1.5 rounded-full ${
+                    isProLimitReached ? "bg-red-500" : "bg-[#1C4D8D]"
+                  }`}
+                  style={{ width: `${proUsagePercent}%` }}
+                />
+              </div>
+              {isProLimitReached && (
+                <p className="mt-1 text-[10px] font-medium text-red-600">
+                  Out of Pro engine limit for this month.
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </section>
 

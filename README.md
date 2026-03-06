@@ -1,6 +1,6 @@
 # Automated Expense Tracker
 
-Full-stack expense management app with authentication, OCR-powered receipt extraction (Tesseract + Gemini), Veryfi pro parsing, dashboards, settings, and support workflows.
+Full-stack expense management app with authentication, OCR-powered receipt extraction (Paddle OCR + Gemini), Veryfi pro parsing, dashboards, settings, and support workflows.
 
 ## Tech Stack
 
@@ -15,7 +15,7 @@ Full-stack expense management app with authentication, OCR-powered receipt extra
 - Expense management: add/list expenses with categories
 - Dashboard analytics: totals, trends, weekly/monthly charts
 - Receipt processing:
-  - Basic mode: Tesseract OCR + Gemini parsing
+  - Basic mode: Paddle OCR + Gemini parsing
   - Pro mode: Veryfi parsing (with OCR fallback)
 - User settings:
   - Default receipt engine
