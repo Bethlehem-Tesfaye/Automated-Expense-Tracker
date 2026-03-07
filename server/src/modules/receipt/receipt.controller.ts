@@ -28,3 +28,17 @@ export const processReceipt = async (
     return next(error);
   }
 };
+
+export const getProUsage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.userId!;
+    const usage = await receiptService.getProReceiptUsage(userId);
+    return res.status(200).json(usage);
+  } catch (error) {
+    return next(error);
+  }
+};

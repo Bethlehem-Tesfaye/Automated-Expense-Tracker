@@ -4,18 +4,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCategory = exports.updateCategory = exports.getCategoryById = exports.getCategory = exports.addCategory = void 0;
+const client_1 = require("@prisma/client");
 const prisma_1 = require("../../lib/prisma");
 const errors_1 = __importDefault(require("../../lib/errors"));
 const addCategory = async ({ userId, name }) => {
     const existing = await prisma_1.prisma.category.findFirst({
-        where: { name, userId, deletedAt: null }
+        where: { name, userId }
     });
-    if (existing)
+    if (existing && existing.deletedAt === null) {
         throw new errors_1.default("Category already exists", 409);
-    const category = await prisma_1.prisma.category.create({
-        data: { name, userId }
-    });
-    return { data: category };
+    }
+    if (existing && existing.deletedAt !== null) {
+        const restoredCategory = await prisma_1.prisma.category.update({
+            where: { id: existing.id },
+            data: { deletedAt: null }
+        });
+        return { data: restoredCategory };
+    }
+    try {
+        const category = await prisma_1.prisma.category.create({
+            data: { name, userId }
+        });
+        return { data: category };
+    }
+    catch (error) {
+        if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002") {
+            throw new errors_1.default("Category already exists", 409);
+        }
+        throw error;
+    }
 };
 exports.addCategory = addCategory;
 const getCategory = async ({ userId, limit = 20, offset = 0, search }) => {
@@ -54,10 +72,20 @@ const updateCategory = async ({ id, userId, name }) => {
     });
     if (!existing)
         throw new errors_1.default("Category not found", 404);
-    const updated = await prisma_1.prisma.category.update({
-        where: { id },
-        data: { name }
-    });
+    let updated;
+    try {
+        updated = await prisma_1.prisma.category.update({
+            where: { id },
+            data: { name }
+        });
+    }
+    catch (error) {
+        if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002") {
+            throw new errors_1.default("Category already exists", 409);
+        }
+        throw error;
+    }
     return { data: updated };
 };
 exports.updateCategory = updateCategory;

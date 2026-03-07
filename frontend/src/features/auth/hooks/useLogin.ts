@@ -19,6 +19,7 @@ interface LoginUser {
   id: string;
   email: string;
   name?: string;
+  emailVerified?: boolean | string | Date | null;
   // add other fields if needed
 }
 
@@ -37,6 +38,16 @@ interface UseLoginResult {
 export const useLogin = (): UseLoginResult => {
   const navigate = useNavigate();
 
+  const isEmailVerified = (user: LoginUser): boolean => {
+    const value = user.emailVerified;
+
+    if (typeof value === "boolean") return value;
+    if (value instanceof Date) return true;
+    if (typeof value === "string") return value.length > 0;
+
+    return true;
+  };
+
   const mutation: UseMutationResult<LoginResponse, Error, LoginInput> =
     useMutation({
       mutationFn: async ({ email, password }: LoginInput) => {
@@ -46,6 +57,12 @@ export const useLogin = (): UseLoginResult => {
         return res.data;
       },
       onSuccess: async (data) => {
+        if (!isEmailVerified(data.user)) {
+          toast.info("Please verify your email to continue.");
+          navigate("/verify-notice");
+          return;
+        }
+
         toast.success(`Welcome back, ${data.user.email}!`);
 
         try {

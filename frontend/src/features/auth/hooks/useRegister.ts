@@ -51,8 +51,9 @@ export const useRegister = (): UseRegisterResult => {
         return res.data; // { user, session? }
       },
       onSuccess: (data) => {
-        toast.success(`Welcome, ${data.user.email}! Complete your profile.`);
-        navigate("/profile");
+        localStorage.setItem(`onboarding:pending:${data.user.id}`, "true");
+        toast.success(`Welcome, ${data.user.email}! Please verify your email.`);
+        navigate("/verify-notice");
       },
       onError: (error: Error) => {
         toast.error(error.message || "Registration failed, please try again.");

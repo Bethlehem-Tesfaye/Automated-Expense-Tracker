@@ -6,17 +6,21 @@ import BrandedLoader from "../components/ui/BrandedLoader";
 
 const ProtectedLayout: React.FC = () => {
   const location = useLocation();
-  const { user, isPending } = useCurrentUser();
+  const { user, isPending, isEmailVerified } = useCurrentUser();
   const { data: profileResponse, isPending: isProfilePending } = useMyProfile({
-    enabled: !!user,
+    enabled: !!user && isEmailVerified,
   });
 
-  if (isPending || (!!user && isProfilePending)) {
+  if (isPending || (!!user && isEmailVerified && isProfilePending)) {
     return <BrandedLoader message="Loading your dashboard..." />;
   }
 
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (!isEmailVerified) {
+    return <Navigate to="/verify-notice" replace />;
   }
 
   const isProfileComplete = profileResponse?.data?.isComplete ?? false;

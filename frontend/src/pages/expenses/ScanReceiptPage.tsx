@@ -12,11 +12,17 @@ import {
   useCreateExpense,
   useExpenseCategories,
 } from "../../features/expenses/hooks/useExpenses";
-import { useProcessReceipt } from "../../features/receipt/hooks/useReceipt";
+import {
+  useProcessReceipt,
+  useProReceiptUsage,
+} from "../../features/receipt/hooks/useReceipt";
 import { useCreateCategory } from "../../features/categories/hooks/useCategories";
 import { useMySettings } from "../../features/settings/hooks/useSettings";
 
 function ScanReceiptPage() {
+  const [processingStage, setProcessingStage] = useState<
+    "idle" | "extracting" | "analyzing"
+  >("idle");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [merchant, setMerchant] = useState("");
   const [amount, setAmount] = useState("");
@@ -29,10 +35,24 @@ function ScanReceiptPage() {
   const createExpenseMutation = useCreateExpense();
   const createCategoryMutation = useCreateCategory();
   const { data: settingsResponse } = useMySettings();
+  const { data: proUsageResponse, refetch: refetchProUsage } =
+    useProReceiptUsage();
   const { data: categoriesResponse, isLoading: isCategoriesLoading } =
     useExpenseCategories();
 
   const categories = categoriesResponse?.data ?? [];
+  const proUsage = proUsageResponse?.data;
+  const proLimit = proUsage?.limit ?? 10;
+  const proUsed = proUsage?.used ?? 0;
+  const proUsagePercent = Math.min(100, Math.round((proUsed / proLimit) * 100));
+  const isProLimitReached = Boolean(proUsage?.reached);
+  const isProcessingReceipt = processingStage !== "idle";
+  const processingProgress =
+    processingStage === "extracting"
+      ? 45
+      : processingStage === "analyzing"
+        ? 85
+        : 0;
 
   const localPreviewUrl = useMemo(() => {
     if (!selectedImage) return "";
@@ -49,55 +69,74 @@ function ScanReceiptPage() {
 
   useEffect(() => {
     if (!settingsResponse?.data) return;
-    setUseProEngine(settingsResponse.data.defaultReceiptEngine === "pro");
-  }, [settingsResponse]);
+    setUseProEngine(
+      settingsResponse.data.defaultReceiptEngine === "pro" &&
+        !isProLimitReached,
+    );
+  }, [settingsResponse, isProLimitReached]);
 
   const processSelectedFile = async (file: File) => {
-    const response = await processReceiptMutation.mutateAsync({
-      image: file,
-      engine: useProEngine ? "pro" : "basic",
-    });
-    const parsed = response.data;
+    if (useProEngine && isProLimitReached) {
+      toast.error("Out of Pro engine limit for this month");
+      return;
+    }
 
-    setImageUrl(response.imageUrl || "");
+    setProcessingStage("extracting");
+    const analyzingTimeout = window.setTimeout(() => {
+      setProcessingStage("analyzing");
+    }, 900);
 
-    setMerchant(parsed?.merchant ?? "");
-    setAmount(
-      parsed?.amount !== null && parsed?.amount !== undefined
-        ? String(parsed.amount)
-        : "",
-    );
-    setDate(parsed?.date ?? "");
+    try {
+      const response = await processReceiptMutation.mutateAsync({
+        image: file,
+        engine: useProEngine ? "pro" : "basic",
+      });
+      void refetchProUsage();
+      const parsed = response.data;
 
-    if (parsed?.category) {
-      const parsedCategoryName = parsed.category.trim();
+      setImageUrl(response.imageUrl || "");
 
-      const matchedCategory = categories.find(
-        (category) =>
-          category.name.trim().toLowerCase() ===
-          parsedCategoryName.toLowerCase(),
+      setMerchant(parsed?.merchant ?? "");
+      setAmount(
+        parsed?.amount !== null && parsed?.amount !== undefined
+          ? String(parsed.amount)
+          : "",
       );
+      setDate(parsed?.date ?? "");
 
-      if (matchedCategory) {
-        setCategoryId(matchedCategory.id);
-      } else {
-        try {
-          const createResponse = await createCategoryMutation.mutateAsync({
-            name: parsedCategoryName,
-          });
+      if (parsed?.category) {
+        const parsedCategoryName = parsed.category.trim();
 
-          const createdCategoryId = createResponse?.data?.id;
-          setCategoryId(createdCategoryId ?? "");
+        const matchedCategory = categories.find(
+          (category) =>
+            category.name.trim().toLowerCase() ===
+            parsedCategoryName.toLowerCase(),
+        );
 
-          if (createdCategoryId) {
-            toast.success(`Created new category: ${parsedCategoryName}`);
+        if (matchedCategory) {
+          setCategoryId(matchedCategory.id);
+        } else {
+          try {
+            const createResponse = await createCategoryMutation.mutateAsync({
+              name: parsedCategoryName,
+            });
+
+            const createdCategoryId = createResponse?.data?.id;
+            setCategoryId(createdCategoryId ?? "");
+
+            if (createdCategoryId) {
+              toast.success(`Created new category: ${parsedCategoryName}`);
+            }
+          } catch {
+            setCategoryId("");
           }
-        } catch {
-          setCategoryId("");
         }
+      } else {
+        setCategoryId("");
       }
-    } else {
-      setCategoryId("");
+    } finally {
+      window.clearTimeout(analyzingTimeout);
+      setProcessingStage("idle");
     }
   };
 
@@ -176,20 +215,59 @@ function ScanReceiptPage() {
             </button>
             <button
               type="button"
-              onClick={() => setUseProEngine(true)}
+              onClick={() => {
+                if (isProLimitReached) {
+                  toast.error("Out of Pro engine limit for this month");
+                  return;
+                }
+
+                setUseProEngine(true);
+              }}
+              disabled={isProLimitReached}
               className={`rounded-full px-3 py-0.5 text-xs font-semibold ${
                 useProEngine
                   ? "bg-[#1C4D8D] text-white"
                   : "text-[#1C4D8D] hover:bg-[#E0EDFF]"
-              }`}
+              } disabled:cursor-not-allowed disabled:opacity-60`}
             >
               Pro
             </button>
           </div>
           <p className="mt-1 text-[11px] text-[#64748B] md:max-w-70">
-            Basic: Tesseract + Gemini. <br></br> Pro: Veryfi (higher accuracy,
-            limited scans per month).
+            {useProEngine
+              ? "Pro: Veryfi (higher accuracy, limited scans per month)."
+              : "Basic: Paddle OCR + Gemini."}
           </p>
+
+          {useProEngine && (
+            <div className="mt-2 rounded-md border border-[#BDE8F5] bg-[#F8FBFF] p-2.5 md:max-w-70">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold text-[#0F2854]">
+                  Pro usage this month
+                </span>
+                <span
+                  className={`text-[11px] font-semibold ${
+                    isProLimitReached ? "text-red-600" : "text-[#1C4D8D]"
+                  }`}
+                >
+                  {proUsed}/{proLimit}
+                </span>
+              </div>
+              <div className="mt-1.5 h-1.5 w-full rounded-full bg-[#EAF3FF]">
+                <div
+                  className={`h-1.5 rounded-full ${
+                    isProLimitReached ? "bg-red-500" : "bg-[#1C4D8D]"
+                  }`}
+                  style={{ width: `${proUsagePercent}%` }}
+                />
+              </div>
+              {isProLimitReached && (
+                <p className="mt-1 text-[10px] font-medium text-red-600">
+                  Out of Pro engine limit for this month.
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
@@ -214,13 +292,29 @@ function ScanReceiptPage() {
                 onChange={handleSelectImage}
                 className="hidden"
               />
-              <p className="text-xs text-[#4988C4]">
-                {processReceiptMutation.isPending
-                  ? "Processing receipt..."
-                  : selectedImage
-                    ? selectedImage.name
-                    : "PNG, JPG, WEBP"}
-              </p>
+
+              {isProcessingReceipt ? (
+                <div className="w-full max-w-70 rounded-md border border-[#D6E6FB] bg-white p-3 text-left">
+                  <div className="flex items-center gap-2 text-xs text-[#1C4D8D]">
+                    <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-[#BDE8F5] border-t-[#1C4D8D]" />
+                    <span>
+                      {processingStage === "extracting"
+                        ? "Extracting text…"
+                        : "Analyzing with AI…"}
+                    </span>
+                  </div>
+                  <div className="mt-2 h-1.5 w-full rounded-full bg-[#EAF3FF]">
+                    <div
+                      className="h-1.5 rounded-full bg-[#1C4D8D] transition-all duration-300"
+                      style={{ width: `${processingProgress}%` }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <p className="text-xs text-[#4988C4]">
+                  {selectedImage ? selectedImage.name : "PNG, JPG, WEBP"}
+                </p>
+              )}
             </label>
           </article>
 

@@ -7,6 +7,8 @@ const upload = makeUploader("receipts");
 
 export const receiptRouter = express.Router();
 
+receiptRouter.get("/pro-usage", authMiddleware, receiptController.getProUsage);
+
 receiptRouter.post(
   "/",
   authMiddleware,

@@ -43,4 +43,5 @@ const upload_1 = require("../../middleware/upload");
 const receiptController = __importStar(require("./receipt.controller"));
 const upload = (0, upload_1.makeUploader)("receipts");
 exports.receiptRouter = express_1.default.Router();
+exports.receiptRouter.get("/pro-usage", auth_middleware_1.default, receiptController.getProUsage);
 exports.receiptRouter.post("/", auth_middleware_1.default, upload.single("image"), receiptController.processReceipt);

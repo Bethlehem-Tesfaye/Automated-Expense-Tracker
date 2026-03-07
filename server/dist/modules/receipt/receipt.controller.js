@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processReceipt = void 0;
+exports.getProUsage = exports.processReceipt = void 0;
 const errors_1 = __importDefault(require("../../lib/errors"));
 const receiptService = __importStar(require("./receipt.service"));
 const processReceipt = async (req, res, next) => {
@@ -59,3 +59,14 @@ const processReceipt = async (req, res, next) => {
     }
 };
 exports.processReceipt = processReceipt;
+const getProUsage = async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const usage = await receiptService.getProReceiptUsage(userId);
+        return res.status(200).json(usage);
+    }
+    catch (error) {
+        return next(error);
+    }
+};
+exports.getProUsage = getProUsage;

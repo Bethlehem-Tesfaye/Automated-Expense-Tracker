@@ -5,16 +5,20 @@ import { useMyProfile } from "../features/profile/hooks/useProfile";
 import BrandedLoader from "../components/ui/BrandedLoader";
 
 const PublicAuthLayout: React.FC = () => {
-  const { user, isPending } = useCurrentUser();
+  const { user, isPending, isEmailVerified } = useCurrentUser();
   const { data: profileResponse, isPending: isProfilePending } = useMyProfile({
-    enabled: !!user,
+    enabled: !!user && isEmailVerified,
   });
 
-  if (isPending || (!!user && isProfilePending)) {
+  if (isPending || (!!user && isEmailVerified && isProfilePending)) {
     return <BrandedLoader message="Preparing Expense Tracker..." />;
   }
 
   if (user) {
+    if (!isEmailVerified) {
+      return <Navigate to="/verify-notice" replace />;
+    }
+
     const isProfileComplete = profileResponse?.data?.isComplete ?? false;
     return (
       <Navigate to={isProfileComplete ? "/dashboard" : "/profile"} replace />
