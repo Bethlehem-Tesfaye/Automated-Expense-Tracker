@@ -33,7 +33,7 @@ function DashboardLayout() {
       {
         targetId: "profile-icon",
         title: "Profile & Settings",
-        description: "Here you can edit your profile and settings.",
+        description: "Here you can edit your profile.",
       },
       {
         targetId: "scan-receipt-link",

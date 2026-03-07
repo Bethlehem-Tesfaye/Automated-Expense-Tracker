@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ChevronDown, Menu, Moon, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ChevronDown, Menu, Moon, Sun, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMyProfile } from "../../profile/hooks/useProfile";
 import { useLogout } from "../../auth/hooks/useLogout";
@@ -11,19 +11,25 @@ interface DashboardHeaderProps {
 
 function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isAvatarBroken, setIsAvatarBroken] = useState(false);
   const { isDark, toggleTheme } = useTheme();
   const { data: profileResponse } = useMyProfile();
   const logoutMutation = useLogout();
   const profile = profileResponse?.data;
 
   const displayName = profile?.displayName || profile?.name || "User";
-  const avatarUrl = profile?.avatarUrl || null;
-  const initials = displayName
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? "")
-    .join("");
+  const avatarUrl = profile?.avatarUrl;
+  const normalizedAvatarUrl =
+    typeof avatarUrl === "string" &&
+    avatarUrl.trim().length > 0 &&
+    avatarUrl !== "null" &&
+    avatarUrl !== "undefined"
+      ? avatarUrl
+      : null;
+
+  useEffect(() => {
+    setIsAvatarBroken(false);
+  }, [normalizedAvatarUrl]);
 
   return (
     <header className="flex h-16 items-center justify-between border-b border-[#BDE8F5] bg-white px-5">
@@ -54,15 +60,16 @@ function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
             data-tour-id="profile-icon"
             className="flex items-center gap-2 rounded-md px-1.5 py-1 transition-colors hover:bg-[#F3F8FF]"
           >
-            {avatarUrl ? (
+            {normalizedAvatarUrl && !isAvatarBroken ? (
               <img
-                src={avatarUrl}
+                src={normalizedAvatarUrl}
                 alt={displayName}
                 className="h-8 w-8 rounded-full object-cover"
+                onError={() => setIsAvatarBroken(true)}
               />
             ) : (
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-[#BDE8F5] to-[#4988C4] text-xs font-semibold text-[#0F2854]">
-                {initials || "U"}
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F3F8FF] text-[#1C4D8D]">
+                <User size={16} />
               </div>
             )}{" "}
             <p className="hidden text-sm font-medium text-[#0F2854] sm:block">

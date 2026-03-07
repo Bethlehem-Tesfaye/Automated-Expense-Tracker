@@ -131,16 +131,14 @@ function DashboardOnboardingTour({
             </h3>
           </div>
 
-          {isLastStep ? (
-            <button
-              type="button"
-              onClick={onFinish}
-              className="rounded-md px-1.5 py-0.5 text-xs font-bold text-[#0F2854] hover:bg-[#EAF3FF]"
-              aria-label="Close onboarding"
-            >
-              ×
-            </button>
-          ) : null}
+          <button
+            type="button"
+            onClick={onFinish}
+            className="rounded-md px-1.5 py-0.5 text-xs font-bold text-[#0F2854] hover:bg-[#EAF3FF]"
+            aria-label="Close onboarding"
+          >
+            ×
+          </button>
         </div>
 
         <p className="mt-2 text-sm text-[#1C4D8D]">{currentStep.description}</p>

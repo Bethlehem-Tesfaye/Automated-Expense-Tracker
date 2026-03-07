@@ -1,5 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import { ArrowLeft, Upload } from "lucide-react";
+import { ArrowLeft, Upload, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Skeleton } from "../../components/ui/skeleton";
 import { hero } from "../../assets";
@@ -22,13 +22,24 @@ function ProfilePage() {
   const [monthlyIncome, setMonthlyIncome] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [isAvatarRemoved, setIsAvatarRemoved] = useState(false);
+  const [isAvatarPreviewBroken, setIsAvatarPreviewBroken] = useState(false);
 
   const isEditMode = Boolean(profile?.isComplete);
+
+  const savedAvatarUrl = profile?.avatarUrl;
+  const normalizedSavedAvatarUrl =
+    typeof savedAvatarUrl === "string" &&
+    savedAvatarUrl.trim().length > 0 &&
+    savedAvatarUrl !== "null" &&
+    savedAvatarUrl !== "undefined"
+      ? savedAvatarUrl
+      : null;
+
   const avatarPreviewUrl = avatarFile
     ? URL.createObjectURL(avatarFile)
     : isAvatarRemoved
       ? null
-      : (profile?.avatarUrl ?? null);
+      : normalizedSavedAvatarUrl;
 
   useEffect(() => {
     if (!profile) return;
@@ -40,12 +51,18 @@ function ProfilePage() {
       profile.monthlyIncome !== null ? String(profile.monthlyIncome) : "",
     );
     setIsAvatarRemoved(false);
+    setIsAvatarPreviewBroken(false);
   }, [profile]);
+
+  useEffect(() => {
+    setIsAvatarPreviewBroken(false);
+  }, [avatarPreviewUrl]);
 
   const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
     setAvatarFile(file);
     setIsAvatarRemoved(false);
+    setIsAvatarPreviewBroken(false);
   };
 
   const handleRemoveAvatar = () => {
@@ -142,14 +159,15 @@ function ProfilePage() {
 
             <div className="mb-6 flex items-center gap-4 rounded-2xl border border-[#DCE9FA] bg-[#F6FAFF] p-4">
               <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-[#BBD6F7] bg-white text-sm font-medium text-[#5B8FCB]">
-                {avatarPreviewUrl ? (
+                {avatarPreviewUrl && !isAvatarPreviewBroken ? (
                   <img
                     src={avatarPreviewUrl}
                     alt="Avatar preview"
                     className="h-full w-full object-cover"
+                    onError={() => setIsAvatarPreviewBroken(true)}
                   />
                 ) : (
-                  "Avatar"
+                  <User size={28} className="text-[#5B8FCB]" />
                 )}
               </div>
 
@@ -169,7 +187,9 @@ function ProfilePage() {
                     />
                   </label>
 
-                  {(avatarPreviewUrl || avatarFile || profile?.avatarUrl) && (
+                  {(avatarPreviewUrl ||
+                    avatarFile ||
+                    normalizedSavedAvatarUrl) && (
                     <button
                       type="button"
                       onClick={handleRemoveAvatar}

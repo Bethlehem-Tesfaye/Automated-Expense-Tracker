@@ -47,7 +47,8 @@ export const useUpdateMyProfile = () => {
 
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.setQueryData(["profile", "me"], data);
       toast.success("Profile saved successfully");
       queryClient.invalidateQueries({ queryKey: ["profile", "me"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard", "overview"] });

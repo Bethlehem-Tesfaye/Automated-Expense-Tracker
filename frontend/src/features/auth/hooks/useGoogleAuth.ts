@@ -1,12 +1,8 @@
 import { authClient } from "../../../lib/authClient";
 
-export const useGoogleAuth = (source: "register" | "login" = "login") => {
+export const useGoogleAuth = (_source: "register" | "login" = "login") => {
   return () => {
-    if (source === "register") {
-      localStorage.setItem("onboarding:social-register-pending", "true");
-    } else {
-      localStorage.removeItem("onboarding:social-register-pending");
-    }
+    localStorage.setItem("onboarding:social-register-pending", "true");
 
     return authClient.signIn.social({
       provider: "google",
