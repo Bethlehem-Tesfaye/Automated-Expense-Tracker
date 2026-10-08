@@ -17,8 +17,8 @@ function BrandedLoader({
     >
       <div className="flex flex-col items-center gap-4">
         <div className="relative flex h-20 w-20 items-center justify-center">
-          <span className="absolute h-20 w-20 rounded-full border-4 border-[#BDE8F5] border-t-[#1C4D8D] animate-spin" />
-          <span className="absolute h-14 w-14 rounded-full border-4 border-[#DCEEFF] border-b-[#4988C4] animate-[spin_1.4s_linear_infinite_reverse]" />
+          <span className="absolute h-20 w-20 rounded-full border-4 border-[#E2E8F0] border-t-[#0D9488] animate-spin" />
+          <span className="absolute h-14 w-14 rounded-full border-4 border-[#F1F5F9] border-b-[#64748B] animate-[spin_1.4s_linear_infinite_reverse]" />
 
           <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm">
             <img
@@ -29,7 +29,7 @@ function BrandedLoader({
           </div>
         </div>
 
-        <p className="text-sm font-medium text-[#1C4D8D]">{message}</p>
+        <p className="text-sm font-medium text-[#475569]">{message}</p>
       </div>
     </div>
   );

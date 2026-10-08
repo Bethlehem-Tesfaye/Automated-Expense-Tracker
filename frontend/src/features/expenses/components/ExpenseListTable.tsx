@@ -43,19 +43,19 @@ function ExpenseListTable({
         <tbody>
           {expenses.length === 0 && (
             <tr>
-              <td colSpan={5} className="px-5 py-10 text-center text-[#4988C4]">
+              <td colSpan={5} className="px-5 py-10 text-center text-[#64748B]">
                 <div className="flex flex-col items-center gap-3">
                   <p>No expenses found.</p>
                   <div className="flex flex-wrap items-center justify-center gap-2">
                     <Link
                       to="/expenses/add"
-                      className="inline-flex h-9 items-center rounded-md bg-[#1C4D8D] px-3 text-xs font-semibold text-white"
+                      className="inline-flex h-9 items-center rounded-md bg-[#0D9488] px-3 text-xs font-semibold text-white"
                     >
                       Add Expense
                     </Link>
                     <Link
                       to="/expenses/scan"
-                      className="inline-flex h-9 items-center rounded-md border border-[#1C4D8D] px-3 text-xs font-semibold text-[#1C4D8D]"
+                      className="inline-flex h-9 items-center rounded-md border border-[#0D9488] px-3 text-xs font-semibold text-[#475569]"
                     >
                       Upload Receipt
                     </Link>
@@ -78,7 +78,7 @@ function ExpenseListTable({
                   {expense.category?.name ?? "-"}
                 </span>
               </td>
-              <td className="px-5 py-6 text-sm font-semibold text-[#4988C4]">
+              <td className="px-5 py-6 text-sm font-semibold text-[#64748B]">
                 {formatMoney(expense.amount)}
               </td>
               <td className="px-5 py-6">
@@ -86,7 +86,7 @@ function ExpenseListTable({
                   <button
                     type="button"
                     onClick={() => onEdit(expense)}
-                    className="transition-colors hover:text-[#1C4D8D]"
+                    className="transition-colors hover:text-[#0D9488]"
                     aria-label={`Edit ${expense.merchant}`}
                   >
                     <Pencil size={18} />

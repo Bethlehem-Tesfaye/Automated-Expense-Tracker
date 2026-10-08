@@ -11,9 +11,9 @@ const Logo: React.FC<LogoProps> = ({ className = "" }) => {
       <img
         src={logoIcon as string}
         alt="Expense Tracker logo"
-        className="h-12 w-12 object-contain"
+        className="h-11 w-11 rounded-2xl bg-white/15 object-contain p-2 backdrop-blur"
       />
-      <span className="text-2xl font-bold">Expense Tracker</span>
+      <span className="text-xl font-bold tracking-tight">Expense Tracker</span>
     </div>
   );
 };

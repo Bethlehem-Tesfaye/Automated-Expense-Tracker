@@ -7,7 +7,7 @@ function ExpensesLayoutPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="h-screen overflow-hidden bg-gray-100 text-[#0F2854]">
+    <div className="h-screen overflow-hidden bg-gray-100 text-[#0F172A]">
       {isMobileMenuOpen && (
         <button
           type="button"

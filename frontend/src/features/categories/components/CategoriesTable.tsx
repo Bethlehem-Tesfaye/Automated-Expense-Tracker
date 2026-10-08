@@ -26,7 +26,7 @@ function CategoriesTable({
         <tbody>
           {categories.length === 0 && (
             <tr>
-              <td colSpan={2} className="px-5 py-10 text-center text-[#4988C4]">
+              <td colSpan={2} className="px-5 py-10 text-center text-[#64748B]">
                 No categories found.
               </td>
             </tr>
@@ -40,7 +40,7 @@ function CategoriesTable({
                   <button
                     type="button"
                     onClick={() => onEdit(category)}
-                    className="cursor-pointer transition-colors hover:text-[#1C4D8D]"
+                    className="cursor-pointer transition-colors hover:text-[#0D9488]"
                     aria-label={`Edit ${category.name}`}
                   >
                     <Pencil size={18} />

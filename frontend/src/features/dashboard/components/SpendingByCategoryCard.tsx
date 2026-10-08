@@ -5,7 +5,24 @@ interface SpendingByCategoryCardProps {
   items: CategorySpendingData[];
 }
 
-function SpendingByCategoryCard({ items }: SpendingByCategoryCardProps) {
+const CATEGORY_PALETTE = [
+  "#14B8A6",
+  "#06B6D4",
+  "#F59E0B",
+  "#10B981",
+  "#F59E0B",
+  "#0EA5E9",
+  "#F97316",
+  "#14B8A6",
+];
+
+function SpendingByCategoryCard({
+  items: rawItems,
+}: SpendingByCategoryCardProps) {
+  const items = rawItems.map((item, index) => ({
+    ...item,
+    color: CATEGORY_PALETTE[index % CATEGORY_PALETTE.length],
+  }));
   const [hoveredCategory, setHoveredCategory] =
     useState<CategorySpendingData | null>(null);
 
@@ -57,10 +74,10 @@ function SpendingByCategoryCard({ items }: SpendingByCategoryCardProps) {
 
   return (
     <article className="bento-card p-5">
-      <h3 className="text-xl font-semibold text-[#0F2854]">
+      <h3 className="text-xl font-semibold text-[#0F172A]">
         Spending by Category
       </h3>
-      <p className="mt-1 text-sm text-[#4988C4]">
+      <p className="mt-1 text-sm text-[#64748B]">
         Breakdown of expenses across different categories.
       </p>
 
@@ -70,7 +87,7 @@ function SpendingByCategoryCard({ items }: SpendingByCategoryCardProps) {
       >
         <div className="relative">
           {hoveredCategory && (
-            <div className="absolute -top-10 left-1/2 z-10 -translate-x-1/2 rounded-md bg-[#0F2854] px-2 py-1 text-xs font-medium whitespace-nowrap text-white shadow-sm">
+            <div className="absolute -top-10 left-1/2 z-10 -translate-x-1/2 rounded-md bg-[#0F172A] px-2 py-1 text-xs font-medium whitespace-nowrap text-white shadow-sm">
               {hoveredCategory.category}: {hoveredCategory.amount}%
             </div>
           )}
@@ -128,7 +145,7 @@ function SpendingByCategoryCard({ items }: SpendingByCategoryCardProps) {
           {items.map((item) => (
             <div
               key={item.category}
-              className="flex items-center gap-1.5 rounded-md px-1 py-0.5 text-xs transition-colors hover:bg-[#BDE8F5]/50"
+              className="flex items-center gap-1.5 rounded-md px-1 py-0.5 text-xs transition-colors hover:bg-[#E2E8F0]/50"
               onMouseEnter={() => setHoveredCategory(item)}
               onMouseLeave={() => setHoveredCategory(null)}
             >
@@ -136,7 +153,7 @@ function SpendingByCategoryCard({ items }: SpendingByCategoryCardProps) {
                 className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: item.color }}
               />
-              <span className="text-[#1C4D8D]">{item.category}</span>
+              <span className="text-[#475569]">{item.category}</span>
             </div>
           ))}
         </div>

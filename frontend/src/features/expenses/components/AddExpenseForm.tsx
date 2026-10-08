@@ -67,7 +67,7 @@ function AddExpenseForm({
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             <label className="space-y-2">
-              <span className="block text-sm font-semibold text-[#0F2854]">
+              <span className="block text-sm font-semibold text-[#0F172A]">
                 Merchant
               </span>
               <input
@@ -75,13 +75,13 @@ function AddExpenseForm({
                 placeholder="Enter merchant"
                 value={merchant}
                 onChange={(event) => setMerchant(event.target.value)}
-                className="h-12 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-[#0F2854] outline-none transition-colors hover:border-[#4988C4] focus:border-[#1C4D8D]"
+                className="h-12 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-[#0F172A] outline-none transition-colors hover:border-[#CBD5E1] focus:border-[#0D9488]"
                 required
               />
             </label>
 
             <label className="space-y-2">
-              <span className="block text-sm font-semibold text-[#0F2854]">
+              <span className="block text-sm font-semibold text-[#0F172A]">
                 Amount
               </span>
               <input
@@ -91,13 +91,13 @@ function AddExpenseForm({
                 placeholder="0.00"
                 value={amount}
                 onChange={(event) => setAmount(event.target.value)}
-                className="h-12 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-[#0F2854] outline-none transition-colors hover:border-[#4988C4] focus:border-[#1C4D8D]"
+                className="h-12 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-[#0F172A] outline-none transition-colors hover:border-[#CBD5E1] focus:border-[#0D9488]"
                 required
               />
             </label>
 
             <label className="space-y-2">
-              <span className="block text-sm font-semibold text-[#0F2854]">
+              <span className="block text-sm font-semibold text-[#0F172A]">
                 Category
               </span>
               <select
@@ -112,7 +112,7 @@ function AddExpenseForm({
 
                   setCategoryId(selectedValue);
                 }}
-                className="h-12 w-full cursor-pointer rounded-md border border-gray-300 bg-white px-3 text-base text-[#0F2854] outline-none transition-colors hover:border-[#4988C4] focus:border-[#1C4D8D]"
+                className="h-12 w-full cursor-pointer rounded-md border border-gray-300 bg-white px-3 text-base text-[#0F172A] outline-none transition-colors hover:border-[#CBD5E1] focus:border-[#0D9488]"
                 required
               >
                 <option value="">Select category</option>
@@ -126,14 +126,14 @@ function AddExpenseForm({
             </label>
 
             <label className="space-y-2">
-              <span className="block text-sm font-semibold text-[#0F2854]">
+              <span className="block text-sm font-semibold text-[#0F172A]">
                 Date
               </span>
               <input
                 type="date"
                 value={date}
                 onChange={(event) => setDate(event.target.value)}
-                className="h-12 w-full cursor-pointer rounded-md border border-gray-300 bg-white px-3 text-base text-[#0F2854] outline-none transition-colors hover:border-[#4988C4] focus:border-[#1C4D8D]"
+                className="h-12 w-full cursor-pointer rounded-md border border-gray-300 bg-white px-3 text-base text-[#0F172A] outline-none transition-colors hover:border-[#CBD5E1] focus:border-[#0D9488]"
               />
             </label>
           </div>
@@ -142,7 +142,7 @@ function AddExpenseForm({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="cursor-pointer rounded-md bg-[#1C4D8D] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0F2854] disabled:cursor-not-allowed disabled:opacity-60"
+              className="cursor-pointer rounded-md bg-[#0D9488] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0F766E] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? "Saving..." : "Add Expense"}
             </button>
@@ -152,8 +152,8 @@ function AddExpenseForm({
 
       {isAddCategoryModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
-          <div className="w-full max-w-md rounded-xl border border-[#BDE8F5] bg-white p-5">
-            <h3 className="text-lg font-semibold text-[#0F2854]">
+          <div className="w-full max-w-md rounded-xl border border-[#E2E8F0] bg-white p-5">
+            <h3 className="text-lg font-semibold text-[#0F172A]">
               Add New Category
             </h3>
 
@@ -163,7 +163,7 @@ function AddExpenseForm({
                 placeholder="Category name"
                 value={newCategoryName}
                 onChange={(event) => setNewCategoryName(event.target.value)}
-                className="w-full rounded-md border border-[#4988C4] px-3 py-2 text-sm text-[#0F2854] outline-none focus:border-[#1C4D8D]"
+                className="w-full rounded-md border border-[#CBD5E1] px-3 py-2 text-sm text-[#0F172A] outline-none focus:border-[#0D9488]"
                 required
               />
 
@@ -174,14 +174,14 @@ function AddExpenseForm({
                     setIsAddCategoryModalOpen(false);
                     setNewCategoryName("");
                   }}
-                  className="cursor-pointer rounded-md border border-[#BDE8F5] px-4 py-2 text-sm font-medium text-[#0F2854]"
+                  className="cursor-pointer rounded-md border border-[#E2E8F0] px-4 py-2 text-sm font-medium text-[#0F172A]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isCreatingCategory}
-                  className="cursor-pointer rounded-md bg-[#1C4D8D] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0F2854] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="cursor-pointer rounded-md bg-[#0D9488] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0F766E] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isCreatingCategory ? "Adding..." : "Add Category"}
                 </button>

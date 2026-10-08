@@ -49,10 +49,10 @@ function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
 
   return (
     <article className="bento-card p-5">
-      <h3 className="text-xl font-semibold text-[#0F2854]">
+      <h3 className="text-xl font-semibold text-[#0F172A]">
         Weekly Spending Overview
       </h3>
-      <p className="mt-1 text-sm text-[#4988C4]">
+      <p className="mt-1 text-sm text-[#64748B]">
         Daily spending patterns for the current week.
       </p>
 
@@ -71,7 +71,7 @@ function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
                 x2={width - paddingRight}
                 y1={tick.y}
                 y2={tick.y}
-                stroke="#BDE8F5"
+                stroke="#E2E8F0"
                 strokeWidth="1"
               />
               <text
@@ -79,7 +79,7 @@ function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
                 y={tick.y + 3}
                 textAnchor="end"
                 fontSize="11"
-                fill="#1C4D8D"
+                fill="#64748B"
               >
                 {formatCompactMoney(tick.value)}
               </text>
@@ -88,7 +88,7 @@ function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
 
           <polyline
             fill="none"
-            stroke="#1C4D8D"
+            stroke="#0D9488"
             strokeWidth="3"
             points={points}
             strokeLinejoin="round"
@@ -103,7 +103,7 @@ function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
                 width="110"
                 height="24"
                 rx="6"
-                fill="#0F2854"
+                fill="#0F172A"
               />
               <text
                 x={hoveredPoint.x}
@@ -139,13 +139,13 @@ function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
                     })
                   }
                 />
-                <circle cx={x} cy={y} r="3.5" fill="#1C4D8D" />
+                <circle cx={x} cy={y} r="3.5" fill="#0D9488" />
                 <text
                   x={x}
                   y={height + 18}
                   textAnchor="middle"
                   fontSize="11"
-                  fill="#1C4D8D"
+                  fill="#0D9488"
                 >
                   {item.day}
                 </text>

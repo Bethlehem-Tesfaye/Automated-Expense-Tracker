@@ -20,8 +20,8 @@ function AddExpensePage() {
   return (
     <div className="space-y-5">
       <section>
-        <h1 className="text-3xl font-bold text-[#0F2854]">Add Expense</h1>
-        <p className="mt-1 text-sm text-[#4988C4]">
+        <h1 className="text-3xl font-bold text-[#0F172A]">Add Expense</h1>
+        <p className="mt-1 text-sm text-[#64748B]">
           Record an expense for today or any previous date.
         </p>
       </section>

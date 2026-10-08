@@ -19,16 +19,16 @@ function MonthlyTrendCard({ items }: MonthlyTrendCardProps) {
 
   return (
     <article className="bento-card p-5">
-      <h3 className="text-xl font-semibold text-[#0F2854]">
+      <h3 className="text-xl font-semibold text-[#0F172A]">
         Monthly Spending Trend
       </h3>
-      <p className="mt-1 text-sm text-[#4988C4]">
+      <p className="mt-1 text-sm text-[#64748B]">
         Overview of your spending over the last 6 months.
       </p>
 
       <div className="mt-7">
         <div className="flex items-start">
-          <div className="mt-1 flex h-44 w-10 flex-col justify-between pr-2 text-right text-[11px] text-[#1C4D8D]">
+          <div className="mt-1 flex h-44 w-10 flex-col justify-between pr-2 text-right text-[11px] text-[#475569]">
             {yTicks.map((tick, index) => (
               <span key={`y-tick-${index}`}>{formatCompactMoney(tick)}</span>
             ))}
@@ -40,7 +40,7 @@ function MonthlyTrendCard({ items }: MonthlyTrendCardProps) {
                 {Array.from({ length: 5 }, (_, index) => (
                   <div
                     key={index}
-                    className="absolute left-0 w-full border-t border-[#BDE8F5]"
+                    className="absolute left-0 w-full border-t border-[#E2E8F0]"
                     style={{ top: `${(index / 4) * 100}%` }}
                   />
                 ))}
@@ -60,13 +60,13 @@ function MonthlyTrendCard({ items }: MonthlyTrendCardProps) {
                       onMouseLeave={() => setHoveredMonthIndex(null)}
                     >
                       {hoveredMonthIndex === index && (
-                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 rounded-md bg-[#0F2854] px-2 py-1 text-xs font-medium whitespace-nowrap text-white shadow-sm">
+                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 rounded-md bg-[#0F172A] px-2 py-1 text-xs font-medium whitespace-nowrap text-white shadow-sm">
                           {item.month}: {formatMoney(item.amount)}
                         </div>
                       )}
 
                       <div
-                        className="w-full cursor-pointer rounded-md bg-[#1C4D8D] transition-opacity hover:opacity-85"
+                        className="w-full cursor-pointer rounded-md bg-[#0D9488] transition-opacity hover:opacity-85"
                         style={{ height: `${heightPercent}%` }}
                       />
                     </div>
@@ -79,7 +79,7 @@ function MonthlyTrendCard({ items }: MonthlyTrendCardProps) {
               {items.map((item, index) => (
                 <span
                   key={`month-label-${index}`}
-                  className="flex-1 text-center text-xs text-[#1C4D8D]"
+                  className="flex-1 text-center text-xs text-[#475569]"
                 >
                   {item.month}
                 </span>

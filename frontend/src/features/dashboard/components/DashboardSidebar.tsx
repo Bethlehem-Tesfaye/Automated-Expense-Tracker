@@ -29,7 +29,7 @@ const footerItems: NavItem[] = [
 ];
 
 const itemClass =
-  "flex h-10 w-full items-center justify-start gap-3 rounded-md px-3 text-sm font-medium transition-colors";
+  "flex h-10 w-full items-center justify-start gap-3 rounded-xl px-3 text-sm font-medium transition-all";
 
 interface DashboardSidebarProps {
   isMobileOpen?: boolean;
@@ -50,18 +50,18 @@ function DashboardSidebar({
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-50 flex w-56 flex-col border-r border-[#BDE8F5] bg-white transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
+      className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[#E2E8F0] bg-white transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
         isMobileOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
-      <div className="flex h-16 items-center border-b border-[#BDE8F5] px-5">
+      <div className="flex h-16 items-center px-5">
         <div className="flex items-center gap-3">
           <img
             src={logoIcon as string}
             alt="Expense Tracker logo"
-            className="h-8 w-8 object-contain"
+            className="h-9 w-9 rounded-xl bg-teal-50 object-contain p-1.5"
           />
-          <p className="text-lg font-bold text-[#1C4D8D]">Expense Tracker</p>
+          <p className="text-lg font-bold text-[#475569]">Expense Tracker</p>
         </div>
       </div>
 
@@ -89,12 +89,12 @@ function DashboardSidebar({
 
                       return `${itemClass} ${
                         isParentActive
-                          ? "bg-[#1C4D8D] text-white"
-                          : "text-[#0F2854] hover:bg-[#BDE8F5]"
+                          ? "bg-[#0D9488] text-white shadow-md shadow-teal-500/30"
+                          : "text-[#475569] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
                       }`;
                     }}
                   >
-                    <Icon size={15} />
+                    <Icon size={17} />
                     <span>{item.label}</span>
                   </NavLink>
 
@@ -107,8 +107,8 @@ function DashboardSidebar({
                         className={({ isActive }) =>
                           `relative flex h-8 items-center rounded-md px-2 pl-4 text-xs font-medium before:absolute before:-left-3 before:top-1/2 before:h-px before:w-2 before:-translate-y-1/2 before:bg-[#94A3B8] ${
                             isActive
-                              ? "bg-[#BDE8F5] text-[#0F2854]"
-                              : "text-[#1C4D8D] hover:bg-[#BDE8F5]/60"
+                              ? "bg-teal-50 font-semibold text-[#0D9488]"
+                              : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
                           }`
                         }
                       >
@@ -121,8 +121,8 @@ function DashboardSidebar({
                         className={({ isActive }) =>
                           `relative flex h-8 items-center rounded-md px-2 pl-4 text-xs font-medium before:absolute before:-left-3 before:top-1/2 before:h-px before:w-2 before:-translate-y-1/2 before:bg-[#94A3B8] ${
                             isActive
-                              ? "bg-[#BDE8F5] text-[#0F2854]"
-                              : "text-[#1C4D8D] hover:bg-[#BDE8F5]/60"
+                              ? "bg-teal-50 font-semibold text-[#0D9488]"
+                              : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
                           }`
                         }
                       >
@@ -134,8 +134,8 @@ function DashboardSidebar({
                         className={({ isActive }) =>
                           `relative flex h-8 items-center rounded-md px-2 pl-4 text-xs font-medium before:absolute before:-left-3 before:top-1/2 before:h-px before:w-2 before:-translate-y-1/2 before:bg-[#94A3B8] ${
                             isActive
-                              ? "bg-[#BDE8F5] text-[#0F2854]"
-                              : "text-[#1C4D8D] hover:bg-[#BDE8F5]/60"
+                              ? "bg-teal-50 font-semibold text-[#0D9488]"
+                              : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
                           }`
                         }
                       >
@@ -151,9 +151,9 @@ function DashboardSidebar({
               <div key={item.label}>
                 <button
                   type="button"
-                  className={`${itemClass} text-[#0F2854] hover:bg-[#BDE8F5]`}
+                  className={`${itemClass} text-[#475569] hover:bg-[#F1F5F9] hover:text-[#0F172A]`}
                 >
-                  <Icon size={15} />
+                  <Icon size={17} />
                   <span>{item.label}</span>
                 </button>
               </div>
@@ -161,7 +161,7 @@ function DashboardSidebar({
           })}
         </nav>
 
-        <nav className="mt-auto space-y-1.5 border-t border-[#BDE8F5] pt-5">
+        <nav className="mt-auto space-y-1.5 border-t border-[#E2E8F0] pt-4">
           {footerItems.map((item) => {
             const Icon = item.icon;
 
@@ -174,12 +174,12 @@ function DashboardSidebar({
                   className={({ isActive }) =>
                     `${itemClass} ${
                       isActive
-                        ? "bg-[#1C4D8D] text-white"
-                        : "text-[#0F2854] hover:bg-[#BDE8F5]"
+                        ? "bg-[#0D9488] text-white shadow-md shadow-teal-500/30"
+                        : "text-[#475569] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
                     }`
                   }
                 >
-                  <Icon size={15} />
+                  <Icon size={17} />
                   <span>{item.label}</span>
                 </NavLink>
               );
@@ -189,9 +189,9 @@ function DashboardSidebar({
               <button
                 type="button"
                 key={item.label}
-                className={`${itemClass} text-[#0F2854] hover:bg-[#BDE8F5]`}
+                className={`${itemClass} text-[#475569] hover:bg-[#F1F5F9] hover:text-[#0F172A]`}
               >
-                <Icon size={15} />
+                <Icon size={17} />
                 <span>{item.label}</span>
               </button>
             );

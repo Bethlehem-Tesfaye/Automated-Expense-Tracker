@@ -88,7 +88,7 @@ function DashboardLayout() {
   };
 
   return (
-    <div className="h-screen overflow-hidden bg-white text-[#0F2854]">
+    <div className="h-screen overflow-hidden bg-white text-[#0F172A]">
       {isMobileMenuOpen && (
         <button
           type="button"
@@ -139,7 +139,7 @@ function DashboardLayout() {
                     <div className="flex flex-wrap gap-2">
                       <Link
                         to="/expenses/scan"
-                        className="inline-flex h-10 items-center rounded-lg bg-white px-4 text-sm font-semibold text-[#1C4D8D] transition-transform hover:-translate-y-0.5"
+                        className="inline-flex h-10 items-center rounded-lg bg-white px-4 text-sm font-semibold text-[#475569] transition-transform hover:-translate-y-0.5"
                       >
                         Scan Receipt
                       </Link>

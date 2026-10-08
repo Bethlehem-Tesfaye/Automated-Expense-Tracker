@@ -28,9 +28,9 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl border border-[#4988C4] rounded-xl p-6 bg-white shadow-sm">
+    <div className="w-full max-w-2xl border border-[#CBD5E1] rounded-xl p-6 bg-white shadow-sm">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold">Forgot your password?</h2>
+        <h2 className="text-2xl font-extrabold tracking-tight">Forgot your password?</h2>
         <p className="text-sm text-gray-500">
           Enter your email and we’ll send you a password reset link.
         </p>
@@ -44,7 +44,7 @@ const ForgotPasswordForm = () => {
           <input
             id="email"
             type="email"
-            className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-[#4988C4] outline-none"
+            className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-[#64748B] outline-none"
             placeholder="you@roommatch.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -55,7 +55,7 @@ const ForgotPasswordForm = () => {
         <button
           type="submit"
           disabled={!email || isPending}
-          className="w-full bg-[#1C4D8D] hover:bg-[#0F2854] text-white rounded-md py-2 font-semibold transition-colors disabled:opacity-60"
+          className="w-full bg-[#0D9488] hover:bg-[#0F766E] text-white rounded-xl py-2.5 font-semibold shadow-lg shadow-teal-500/30 transition-all disabled:opacity-60"
         >
           {isPending ? "Sending..." : "Send reset link"}
         </button>
@@ -69,7 +69,7 @@ const ForgotPasswordForm = () => {
 
       <Link
         to="/login"
-        className="block text-center text-sm text-[#1C4D8D] font-medium mt-4 hover:underline"
+        className="block text-center text-sm text-[#475569] font-medium mt-4 hover:underline"
       >
         Back to login
       </Link>

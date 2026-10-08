@@ -43,8 +43,8 @@ function PaginationButton({
       className={cn(
         "inline-flex h-9 min-w-9 items-center justify-center rounded-md border px-3 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50",
         isActive
-          ? "border-[#1C4D8D] bg-[#1C4D8D] text-white"
-          : "border-[#BDE8F5] bg-white text-[#0F2854] hover:bg-[#BDE8F5]/40",
+          ? "border-[#0D9488] bg-[#0D9488] text-white"
+          : "border-[#E2E8F0] bg-white text-[#0F172A] hover:bg-[#E2E8F0]/40",
         className,
       )}
       {...props}

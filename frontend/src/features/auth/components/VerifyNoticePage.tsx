@@ -18,16 +18,16 @@ const VerifyNoticePage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-2xl border border-[#4988C4] rounded-xl p-6 bg-white">
+      <div className="w-full max-w-2xl border border-[#CBD5E1] rounded-xl p-6 bg-white">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold">Verify your email</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight">Verify your email</h2>
           <p className="text-sm text-gray-500">
             We’ve sent a verification link to your email. Please check your
             inbox and click the link to continue.
           </p>
         </div>
 
-        <div className="border border-[#BDE8F5] rounded-lg p-4 bg-[#BDE8F5]/30 text-sm text-gray-600">
+        <div className="border border-[#E2E8F0] rounded-lg p-4 bg-[#E2E8F0]/30 text-sm text-gray-600">
           If you don’t see the email, check your spam folder or try resending.
         </div>
 
@@ -36,14 +36,14 @@ const VerifyNoticePage: React.FC = () => {
             type="button"
             disabled={!email || isPending}
             onClick={onResend}
-            className="w-full bg-[#1C4D8D] hover:bg-[#0F2854] text-white rounded-md py-2 font-semibold transition-colors disabled:opacity-60"
+            className="w-full bg-[#0D9488] hover:bg-[#0F766E] text-white rounded-xl py-2.5 font-semibold shadow-lg shadow-teal-500/30 transition-all disabled:opacity-60"
           >
             {isPending ? "Sending..." : "Resend verification email"}
           </button>
 
           <Link
             to="/login"
-            className="block text-center text-sm text-[#1C4D8D] font-medium"
+            className="block text-center text-sm text-[#475569] font-medium"
           >
             Back to login
           </Link>

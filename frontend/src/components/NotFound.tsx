@@ -4,7 +4,7 @@ import { warning } from "../assets/index";
 const NotFound: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
-      <div className="w-full max-w-2xl border border-[#4988C4] rounded-xl p-6 bg-white shadow-sm text-center">
+      <div className="w-full max-w-2xl border border-[#CBD5E1] rounded-xl p-6 bg-white shadow-sm text-center">
         <img
           src={warning as string}
           alt="Not found"
@@ -16,7 +16,7 @@ const NotFound: React.FC = () => {
         </p>
         <Link
           to="/"
-          className="inline-block bg-[#1C4D8D] hover:bg-[#0F2854] text-white rounded-md py-2 px-6 font-semibold transition-colors"
+          className="inline-block bg-[#0D9488] hover:bg-[#0F766E] text-white rounded-md py-2 px-6 font-semibold transition-colors"
         >
           Go home
         </Link>

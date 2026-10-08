@@ -11,24 +11,24 @@ function OverviewCards({ items, className = "" }: OverviewCardsProps) {
       {items.map((item) => {
         const trendColor =
           item.trendTone === "positive"
-            ? "text-[#1C4D8D]"
+            ? "text-[#475569]"
             : item.trendTone === "negative"
               ? "text-red-500"
-              : "text-[#4988C4]";
+              : "text-[#64748B]";
 
         return (
           <article
             key={item.title}
             className="bento-card flex flex-col justify-between p-5"
           >
-            <p className="text-xs font-medium text-[#1C4D8D]">{item.title}</p>
-            <h3 className="mt-1 text-3xl font-bold text-[#0F2854]">
+            <p className="text-xs font-medium text-[#475569]">{item.title}</p>
+            <h3 className="mt-1 text-3xl font-bold text-[#0F172A]">
               {item.value}
             </h3>
             <p className={`mt-2 text-xs font-semibold ${trendColor}`}>
               {item.trend}
             </p>
-            <p className="mt-1 text-xs text-[#4988C4]">{item.description}</p>
+            <p className="mt-1 text-xs text-[#64748B]">{item.description}</p>
           </article>
         );
       })}

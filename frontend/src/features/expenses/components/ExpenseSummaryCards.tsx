@@ -15,8 +15,8 @@ function ExpenseSummaryCards({
       </article>
 
       <article className="bento-card p-5">
-        <p className="text-xs font-medium text-[#1C4D8D]">Total Spent</p>
-        <p className="mt-1 text-3xl font-bold text-[#0F2854]">
+        <p className="text-xs font-medium text-[#475569]">Total Spent</p>
+        <p className="mt-1 text-3xl font-bold text-[#0F172A]">
           $
           {totalAmount.toLocaleString("en-US", {
             minimumFractionDigits: 2,

@@ -51,7 +51,7 @@ function CategoriesPage() {
   return (
     <div className="space-y-5">
       <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <h1 className="text-3xl font-bold text-[#0F2854]">Categories</h1>
+        <h1 className="text-3xl font-bold text-[#0F172A]">Categories</h1>
 
         <AddCategoryForm
           isSubmitting={createCategoryMutation.isPending}
@@ -71,7 +71,7 @@ function CategoriesPage() {
             setSearch(event.target.value);
             setPage(1);
           }}
-          className="mt-2 h-11 w-full rounded-md border border-gray-200 bg-white px-3 text-sm text-[#0F2854] outline-none transition-colors hover:border-[#4988C4] focus:border-[#1C4D8D] md:w-80"
+          className="mt-2 h-11 w-full rounded-md border border-gray-200 bg-white px-3 text-sm text-[#0F172A] outline-none transition-colors hover:border-[#CBD5E1] focus:border-[#0D9488] md:w-80"
         />
       </section>
 
@@ -83,7 +83,7 @@ function CategoriesPage() {
         )}
 
         {isLoading ? (
-          <div className="rounded-md border-2 border-[#BDE8F5] bg-white">
+          <div className="rounded-md border-2 border-[#E2E8F0] bg-white">
             <CategoriesTableSkeleton />
           </div>
         ) : (

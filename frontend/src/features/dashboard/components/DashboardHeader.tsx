@@ -32,11 +32,11 @@ function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
   }, [normalizedAvatarUrl]);
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-[#BDE8F5] bg-white px-5">
+    <header className="nav-glass sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#E2E8F0] px-4 sm:px-6">
       <button
         type="button"
         onClick={onToggleMenu}
-        className="text-[#1C4D8D] transition-colors hover:text-[#0F2854] lg:hidden"
+        className="text-[#475569] transition-colors hover:text-[#0F172A] lg:hidden"
         aria-label="Toggle menu"
       >
         <Menu size={20} />
@@ -46,7 +46,7 @@ function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
         <button
           type="button"
           onClick={toggleTheme}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#BDE8F5] bg-[#F3F8FF] text-[#1C4D8D] transition-colors hover:bg-[#EAF3FF] hover:text-[#0F2854]"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2E8F0] bg-white text-[#475569] transition-colors hover:border-teal-300 hover:text-[#0D9488]"
           aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           title={isDark ? "Light mode" : "Dark mode"}
         >
@@ -58,32 +58,32 @@ function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
             type="button"
             onClick={() => setIsProfileMenuOpen((current) => !current)}
             data-tour-id="profile-icon"
-            className="flex items-center gap-2 rounded-md px-1.5 py-1 transition-colors hover:bg-[#F3F8FF]"
+            className="flex items-center gap-2 rounded-xl border border-transparent px-1.5 py-1 transition-colors hover:border-[#E2E8F0] hover:bg-white"
           >
             {normalizedAvatarUrl && !isAvatarBroken ? (
               <img
                 src={normalizedAvatarUrl}
                 alt={displayName}
-                className="h-8 w-8 rounded-full object-cover"
+                className="h-9 w-9 rounded-xl object-cover ring-2 ring-teal-100"
                 onError={() => setIsAvatarBroken(true)}
               />
             ) : (
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F3F8FF] text-[#1C4D8D]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-[#0D9488]">
                 <User size={16} />
               </div>
             )}{" "}
-            <p className="hidden text-sm font-medium text-[#0F2854] sm:block">
+            <p className="hidden text-sm font-medium text-[#0F172A] sm:block">
               {displayName}
             </p>
-            <ChevronDown size={16} className="text-[#1C4D8D]" />
+            <ChevronDown size={16} className="text-[#475569]" />
           </button>
 
           {isProfileMenuOpen && (
-            <div className="absolute right-0 z-20 mt-2 w-44 rounded-lg border border-[#D6E6FB] bg-white py-1 shadow-lg">
+            <div className="absolute right-0 z-20 mt-2 w-48 rounded-2xl border border-[#E2E8F0] bg-white p-1.5 shadow-xl shadow-slate-900/10">
               <Link
                 to="/profile"
                 onClick={() => setIsProfileMenuOpen(false)}
-                className="block px-3 py-2 text-sm font-medium text-[#0F2854] transition-colors hover:bg-[#F3F8FF]"
+                className="block rounded-xl px-3 py-2 text-sm font-medium text-[#0F172A] transition-colors hover:bg-[#F1F5F9]"
               >
                 Edit Profile
               </Link>
@@ -94,7 +94,7 @@ function DashboardHeader({ onToggleMenu }: DashboardHeaderProps) {
                   logoutMutation.mutate();
                 }}
                 disabled={logoutMutation.isPending}
-                className="block w-full px-3 py-2 text-left text-sm font-medium text-[#0F2854] transition-colors hover:bg-[#F3F8FF] disabled:cursor-not-allowed disabled:opacity-60"
+                className="block w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-[#0F172A] transition-colors hover:bg-[#F1F5F9] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {logoutMutation.isPending ? "Logging out..." : "Logout"}
               </button>

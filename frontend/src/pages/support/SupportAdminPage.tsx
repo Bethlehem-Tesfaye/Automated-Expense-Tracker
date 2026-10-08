@@ -25,14 +25,14 @@ function SupportAdminPage() {
     <div className="space-y-5">
       <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-[#0F2854]">Support Admin</h1>
-          <p className="mt-1 text-sm text-[#4988C4]">
+          <h1 className="text-3xl font-bold text-[#0F172A]">Support Admin</h1>
+          <p className="mt-1 text-sm text-[#64748B]">
             Review all support requests and mark them as open or resolved.
           </p>
         </div>
 
         <label className="space-y-1.5">
-          <span className="text-xs font-semibold text-[#1C4D8D]">
+          <span className="text-xs font-semibold text-[#475569]">
             Status filter
           </span>
           <select
@@ -40,7 +40,7 @@ function SupportAdminPage() {
             onChange={(event) =>
               setStatusFilter(event.target.value as "all" | SupportStatus)
             }
-            className="h-10 rounded-md border border-gray-300 px-3 text-sm text-[#0F2854]"
+            className="h-10 rounded-md border border-gray-300 px-3 text-sm text-[#0F172A]"
           >
             <option value="all">All</option>
             <option value="open">Open</option>
@@ -59,28 +59,28 @@ function SupportAdminPage() {
       <section className="bento-card p-5">
         <div className="space-y-3">
           {isLoading ? (
-            <p className="text-sm text-[#4988C4]">Loading support queue...</p>
+            <p className="text-sm text-[#64748B]">Loading support queue...</p>
           ) : requests.length === 0 ? (
-            <p className="text-sm text-[#4988C4]">No support requests found.</p>
+            <p className="text-sm text-[#64748B]">No support requests found.</p>
           ) : (
             requests.map((request) => (
               <article
                 key={request.id}
-                className="rounded-lg border border-[#DCE9FA] bg-[#F8FBFF] p-4"
+                className="rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-4"
               >
                 <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-[#0F2854]">
+                    <p className="text-sm font-semibold text-[#0F172A]">
                       {request.subject}
                     </p>
-                    <p className="mt-1 text-xs text-[#4988C4]">
+                    <p className="mt-1 text-xs text-[#64748B]">
                       {request.userName} • {request.userEmail}
                     </p>
-                    <p className="mt-2 text-xs capitalize text-[#1C4D8D]">
+                    <p className="mt-2 text-xs capitalize text-[#475569]">
                       {request.category} •{" "}
                       {new Date(request.createdAt).toLocaleString("en-US")}
                     </p>
-                    <p className="mt-3 text-sm text-[#0F2854]">
+                    <p className="mt-3 text-sm text-[#0F172A]">
                       {request.message}
                     </p>
                   </div>
@@ -95,7 +95,7 @@ function SupportAdminPage() {
                         })
                       }
                       disabled={updateStatusMutation.isPending}
-                      className="rounded-md border border-[#BDE8F5] px-3 py-1.5 text-xs font-semibold text-[#0F2854] hover:bg-[#EEF6FF] disabled:opacity-60"
+                      className="rounded-md border border-[#E2E8F0] px-3 py-1.5 text-xs font-semibold text-[#0F172A] hover:bg-[#F1F5F9] disabled:opacity-60"
                     >
                       Mark Open
                     </button>
@@ -108,7 +108,7 @@ function SupportAdminPage() {
                         })
                       }
                       disabled={updateStatusMutation.isPending}
-                      className="rounded-md bg-[#1C4D8D] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0F2854] disabled:opacity-60"
+                      className="rounded-md bg-[#0D9488] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0F766E] disabled:opacity-60"
                     >
                       Mark Resolved
                     </button>

@@ -43,8 +43,8 @@ function SettingsPage() {
   return (
     <div className="space-y-5">
       <section>
-        <h1 className="text-3xl font-bold text-[#0F2854]">Settings</h1>
-        <p className="mt-1 text-sm text-[#4988C4]">
+        <h1 className="text-3xl font-bold text-[#0F172A]">Settings</h1>
+        <p className="mt-1 text-sm text-[#64748B]">
           Manage your default preferences for receipts and account behavior.
         </p>
       </section>
@@ -62,10 +62,10 @@ function SettingsPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <label className="bento-card block space-y-2 p-5">
-              <span className="text-sm font-semibold text-[#0F2854]">
+              <span className="text-sm font-semibold text-[#0F172A]">
                 Default Receipt Engine
               </span>
-              <p className="text-xs text-[#4988C4]">
+              <p className="text-xs text-[#64748B]">
                 Which engine reads your receipts by default.
               </p>
               <select
@@ -73,7 +73,7 @@ function SettingsPage() {
                 onChange={(event) =>
                   setDefaultReceiptEngine(event.target.value as ReceiptEngine)
                 }
-                className="h-11 w-full rounded-lg border border-gray-300 px-3 text-sm text-[#0F2854]"
+                className="h-11 w-full rounded-lg border border-gray-300 px-3 text-sm text-[#0F172A]"
               >
                 <option value="basic">Basic (OCR + Gemini)</option>
                 <option value="pro">Pro (Veryfi)</option>
@@ -81,10 +81,10 @@ function SettingsPage() {
             </label>
 
             <label className="bento-card block space-y-2 p-5">
-              <span className="text-sm font-semibold text-[#0F2854]">
+              <span className="text-sm font-semibold text-[#0F172A]">
                 Default Currency
               </span>
-              <p className="text-xs text-[#4988C4]">
+              <p className="text-xs text-[#64748B]">
                 Used to display amounts across the app.
               </p>
               <select
@@ -92,7 +92,7 @@ function SettingsPage() {
                 onChange={(event) =>
                   setDefaultCurrency(event.target.value as CurrencyCode)
                 }
-                className="h-11 w-full rounded-lg border border-gray-300 px-3 text-sm text-[#0F2854]"
+                className="h-11 w-full rounded-lg border border-gray-300 px-3 text-sm text-[#0F172A]"
               >
                 <option value="USD">USD ($)</option>
                 <option value="EUR">EUR (€)</option>
@@ -104,10 +104,10 @@ function SettingsPage() {
 
             <label className="bento-card flex cursor-pointer items-start justify-between gap-4 p-5 md:col-span-2 xl:col-span-1">
               <div>
-                <p className="text-sm font-semibold text-[#0F2854]">
+                <p className="text-sm font-semibold text-[#0F172A]">
                   Email Notifications
                 </p>
-                <p className="mt-1 text-xs text-[#4988C4]">
+                <p className="mt-1 text-xs text-[#64748B]">
                   Receive reminders and useful account updates by email.
                 </p>
               </div>
@@ -117,7 +117,7 @@ function SettingsPage() {
                 onChange={(event) =>
                   setEmailNotifications(event.target.checked)
                 }
-                className="mt-0.5 h-5 w-5 shrink-0 accent-[#1C4D8D]"
+                className="mt-0.5 h-5 w-5 shrink-0 accent-[#0D9488]"
               />
             </label>
           </div>
@@ -126,7 +126,7 @@ function SettingsPage() {
             <button
               type="submit"
               disabled={updateSettingsMutation.isPending}
-              className="rounded-lg bg-[#1C4D8D] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0F2854] disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-lg bg-[#0D9488] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0F766E] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {updateSettingsMutation.isPending ? "Saving..." : "Save Settings"}
             </button>

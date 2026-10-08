@@ -193,22 +193,22 @@ function ScanReceiptPage() {
     <div className="space-y-5">
       <section className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-[#0F2854]">Scan Receipt</h1>
-          <p className="mt-1 text-sm text-[#4988C4]">
+          <h1 className="text-3xl font-bold text-[#0F172A]">Scan Receipt</h1>
+          <p className="mt-1 text-sm text-[#64748B]">
             Upload a receipt image and auto-fill expense details using OCR + AI.
           </p>
         </div>
 
         <div className="md:text-right">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#BDE8F5] bg-[#F8FBFF] px-3 py-1">
-            <span className="text-xs font-medium text-[#0F2854]">Engine:</span>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-1">
+            <span className="text-xs font-medium text-[#0F172A]">Engine:</span>
             <button
               type="button"
               onClick={() => setUseProEngine(false)}
               className={`rounded-full px-3 py-0.5 text-xs font-semibold ${
                 !useProEngine
-                  ? "bg-[#1C4D8D] text-white"
-                  : "text-[#1C4D8D] hover:bg-[#E0EDFF]"
+                  ? "bg-[#0D9488] text-white"
+                  : "text-[#475569] hover:bg-[#F1F5F9]"
               }`}
             >
               Basic
@@ -226,8 +226,8 @@ function ScanReceiptPage() {
               disabled={isProLimitReached}
               className={`rounded-full px-3 py-0.5 text-xs font-semibold ${
                 useProEngine
-                  ? "bg-[#1C4D8D] text-white"
-                  : "text-[#1C4D8D] hover:bg-[#E0EDFF]"
+                  ? "bg-[#0D9488] text-white"
+                  : "text-[#475569] hover:bg-[#F1F5F9]"
               } disabled:cursor-not-allowed disabled:opacity-60`}
             >
               Pro
@@ -240,23 +240,23 @@ function ScanReceiptPage() {
           </p>
 
           {useProEngine && (
-            <div className="mt-2 rounded-md border border-[#BDE8F5] bg-[#F8FBFF] p-2.5 md:max-w-70">
+            <div className="mt-2 rounded-md border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 md:max-w-70">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-semibold text-[#0F2854]">
+                <span className="text-[11px] font-semibold text-[#0F172A]">
                   Pro usage this month
                 </span>
                 <span
                   className={`text-[11px] font-semibold ${
-                    isProLimitReached ? "text-red-600" : "text-[#1C4D8D]"
+                    isProLimitReached ? "text-red-600" : "text-[#475569]"
                   }`}
                 >
                   {proUsed}/{proLimit}
                 </span>
               </div>
-              <div className="mt-1.5 h-1.5 w-full rounded-full bg-[#EAF3FF]">
+              <div className="mt-1.5 h-1.5 w-full rounded-full bg-[#F1F5F9]">
                 <div
                   className={`h-1.5 rounded-full ${
-                    isProLimitReached ? "bg-red-500" : "bg-[#1C4D8D]"
+                    isProLimitReached ? "bg-red-500" : "bg-[#0D9488]"
                   }`}
                   style={{ width: `${proUsagePercent}%` }}
                 />
@@ -277,13 +277,13 @@ function ScanReceiptPage() {
             <label
               onDragOver={(event) => event.preventDefault()}
               onDrop={handleDropImage}
-              className="flex min-h-44 cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-[#D6E6FB] bg-[#F8FBFF] px-4 text-center"
+              className="flex min-h-44 cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-[#E2E8F0] bg-[#F8FAFC] px-4 text-center"
             >
-              <CloudUpload size={34} className="text-[#1C4D8D]" />
-              <p className="text-sm font-semibold text-[#0F2854]">
+              <CloudUpload size={34} className="text-[#475569]" />
+              <p className="text-sm font-semibold text-[#0F172A]">
                 Drag & drop your receipt here or
               </p>
-              <span className="rounded-md border border-[#BDE8F5] bg-white px-4 py-2 text-sm font-semibold text-[#1C4D8D]">
+              <span className="rounded-md border border-[#E2E8F0] bg-white px-4 py-2 text-sm font-semibold text-[#475569]">
                 Click to upload
               </span>
               <input
@@ -294,24 +294,24 @@ function ScanReceiptPage() {
               />
 
               {isProcessingReceipt ? (
-                <div className="w-full max-w-70 rounded-md border border-[#D6E6FB] bg-white p-3 text-left">
-                  <div className="flex items-center gap-2 text-xs text-[#1C4D8D]">
-                    <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-[#BDE8F5] border-t-[#1C4D8D]" />
+                <div className="w-full max-w-70 rounded-md border border-[#E2E8F0] bg-white p-3 text-left">
+                  <div className="flex items-center gap-2 text-xs text-[#475569]">
+                    <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#0D9488]" />
                     <span>
                       {processingStage === "extracting"
                         ? "Extracting text…"
                         : "Analyzing with AI…"}
                     </span>
                   </div>
-                  <div className="mt-2 h-1.5 w-full rounded-full bg-[#EAF3FF]">
+                  <div className="mt-2 h-1.5 w-full rounded-full bg-[#F1F5F9]">
                     <div
-                      className="h-1.5 rounded-full bg-[#1C4D8D] transition-all duration-300"
+                      className="h-1.5 rounded-full bg-[#0D9488] transition-all duration-300"
                       style={{ width: `${processingProgress}%` }}
                     />
                   </div>
                 </div>
               ) : (
-                <p className="text-xs text-[#4988C4]">
+                <p className="text-xs text-[#64748B]">
                   {selectedImage ? selectedImage.name : "PNG, JPG, WEBP"}
                 </p>
               )}
@@ -319,7 +319,7 @@ function ScanReceiptPage() {
           </article>
 
           <article className="bento-card p-5">
-            <h2 className="text-2xl font-semibold text-[#0F2854]">
+            <h2 className="text-2xl font-semibold text-[#0F172A]">
               Receipt Preview
             </h2>
             <div className="mt-4 flex h-90 items-center justify-center rounded-lg bg-[#F6F8FB] p-3">
@@ -339,38 +339,38 @@ function ScanReceiptPage() {
         </div>
 
         <article className="bento-card p-5">
-          <h2 className="text-2xl font-semibold text-[#0F2854]">
+          <h2 className="text-2xl font-semibold text-[#0F172A]">
             OCR Extracted Fields
           </h2>
-          <p className="mt-1 text-xs text-[#4988C4]">
+          <p className="mt-1 text-xs text-[#64748B]">
             AI detected these values. You can edit before saving.
           </p>
           <form onSubmit={handleSaveExpense} className="mt-6 space-y-4">
             <label className="space-y-1.5">
-              <span className="text-sm font-semibold text-[#0F2854]">
+              <span className="text-sm font-semibold text-[#0F172A]">
                 Merchant
               </span>
               <input
                 type="text"
                 value={merchant}
                 onChange={(event) => setMerchant(event.target.value)}
-                className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F2854]"
+                className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F172A]"
                 required
               />
             </label>
 
             <label className="space-y-1.5">
-              <span className="text-sm font-semibold text-[#0F2854]">Date</span>
+              <span className="text-sm font-semibold text-[#0F172A]">Date</span>
               <input
                 type="date"
                 value={date}
                 onChange={(event) => setDate(event.target.value)}
-                className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F2854]"
+                className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F172A]"
               />
             </label>
 
             <label className="space-y-1.5">
-              <span className="text-sm font-semibold text-[#0F2854]">
+              <span className="text-sm font-semibold text-[#0F172A]">
                 Total Amount
               </span>
               <input
@@ -379,19 +379,19 @@ function ScanReceiptPage() {
                 step="0.01"
                 value={amount}
                 onChange={(event) => setAmount(event.target.value)}
-                className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F2854]"
+                className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F172A]"
                 required
               />
             </label>
 
             <label className="space-y-1.5">
-              <span className="text-sm font-semibold text-[#0F2854]">
+              <span className="text-sm font-semibold text-[#0F172A]">
                 Category
               </span>
               <select
                 value={categoryId}
                 onChange={(event) => setCategoryId(event.target.value)}
-                className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F2854]"
+                className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F172A]"
                 disabled={isCategoriesLoading}
                 required
               >
@@ -408,14 +408,14 @@ function ScanReceiptPage() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="rounded-md border border-[#BDE8F5] px-4 py-2 text-sm font-semibold text-[#0F2854] hover:bg-[#EEF6FF]"
+                className="rounded-md border border-[#E2E8F0] px-4 py-2 text-sm font-semibold text-[#0F172A] hover:bg-[#F1F5F9]"
               >
                 Reset
               </button>
               <button
                 type="submit"
                 disabled={createExpenseMutation.isPending}
-                className="rounded-md bg-[#1C4D8D] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0F2854] disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-md bg-[#0D9488] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0F766E] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {createExpenseMutation.isPending ? "Saving..." : "Save Expense"}
               </button>

@@ -98,7 +98,7 @@ function ExpenseListPage() {
   return (
     <div className="w-full space-y-5">
       <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <h1 className="text-xl font-bold text-[#0F2854]">Previous Records</h1>
+        <h1 className="text-xl font-bold text-[#0F172A]">Previous Records</h1>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="relative w-full sm:w-72">
@@ -114,7 +114,7 @@ function ExpenseListPage() {
                 setSearch(event.target.value);
                 setPage(1);
               }}
-              className="h-11 w-full rounded-md border border-gray-200 bg-white px-4 pr-10 text-sm text-[#0F2854] outline-none focus:border-[#1C4D8D]"
+              className="h-11 w-full rounded-md border border-gray-200 bg-white px-4 pr-10 text-sm text-[#0F172A] outline-none focus:border-[#0D9488]"
             />
           </div>
         </div>
@@ -122,12 +122,12 @@ function ExpenseListPage() {
 
       <section className="bento-card p-5">
         <div className="flex items-center justify-between border-b border-gray-200 pb-3">
-          <p className="text-sm font-semibold text-[#0F2854]">Filter By</p>
+          <p className="text-sm font-semibold text-[#0F172A]">Filter By</p>
 
           <button
             type="button"
             onClick={resetFilters}
-            className="inline-flex items-center gap-2 text-sm font-medium text-[#1C4D8D] hover:text-[#0F2854]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[#475569] hover:text-[#0F172A]"
           >
             <RotateCcw size={15} />
             Reset Filter
@@ -144,7 +144,7 @@ function ExpenseListPage() {
               <button
                 type="button"
                 onClick={() => openDatePicker(fromDateRef.current)}
-                className="text-left text-sm font-medium leading-none  cursor-pointer text-[#0F2854]"
+                className="text-left text-sm font-medium leading-none  cursor-pointer text-[#0F172A]"
               >
                 {dateDisplayValue}
               </button>
@@ -156,7 +156,7 @@ function ExpenseListPage() {
                     fromDate ? toDateRef.current : fromDateRef.current,
                   )
                 }
-                className="text-gray-500 transition-colors hover:text-[#1C4D8D] cursor-pointer"
+                className="text-gray-500 transition-colors hover:text-[#0D9488] cursor-pointer"
                 aria-label="Open date picker"
               >
                 <Calendar size={26} />
@@ -195,7 +195,7 @@ function ExpenseListPage() {
               setPage(1);
             }}
             disabled={isCategoriesLoading}
-            className="h-13  cursor-pointer rounded-md border border-gray-200 bg-white px-3 text-sm text-[#0F2854] outline-none focus:border-[#1C4D8D]"
+            className="h-13  cursor-pointer rounded-md border border-gray-200 bg-white px-3 text-sm text-[#0F172A] outline-none focus:border-[#0D9488]"
           >
             <option value="">Category</option>
             {categories.map((category) => (
@@ -221,7 +221,7 @@ function ExpenseListPage() {
         )}
 
         {isExpensesLoading ? (
-          <div className="rounded-md border-2 border-[#BDE8F5] bg-white">
+          <div className="rounded-md border-2 border-[#E2E8F0] bg-white">
             <ExpenseListTableSkeleton />
           </div>
         ) : (

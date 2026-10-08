@@ -118,15 +118,15 @@ function DashboardOnboardingTour({
       )}
 
       <div
-        className="pointer-events-auto absolute w-80 rounded-xl border border-[#BDE8F5] bg-white p-4 shadow-xl"
+        className="pointer-events-auto absolute w-80 rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-xl"
         style={tooltipStyle}
       >
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-xs font-semibold text-[#4988C4]">
+            <p className="text-xs font-semibold text-[#64748B]">
               Step {stepIndex + 1} of {steps.length}
             </p>
-            <h3 className="mt-1 text-sm font-bold text-[#0F2854]">
+            <h3 className="mt-1 text-sm font-bold text-[#0F172A]">
               {currentStep.title}
             </h3>
           </div>
@@ -134,14 +134,14 @@ function DashboardOnboardingTour({
           <button
             type="button"
             onClick={onFinish}
-            className="rounded-md px-1.5 py-0.5 text-xs font-bold text-[#0F2854] hover:bg-[#EAF3FF]"
+            className="rounded-md px-1.5 py-0.5 text-xs font-bold text-[#0F172A] hover:bg-[#F1F5F9]"
             aria-label="Close onboarding"
           >
             ×
           </button>
         </div>
 
-        <p className="mt-2 text-sm text-[#1C4D8D]">{currentStep.description}</p>
+        <p className="mt-2 text-sm text-[#475569]">{currentStep.description}</p>
 
         <div className="mt-3 flex justify-end">
           <button
@@ -154,7 +154,7 @@ function DashboardOnboardingTour({
 
               setStepIndex((current) => current + 1);
             }}
-            className="text-sm font-semibold text-[#1C4D8D] underline underline-offset-2 hover:text-[#0F2854]"
+            className="text-sm font-semibold text-[#475569] underline underline-offset-2 hover:text-[#0F172A]"
           >
             {isLastStep ? "Finish" : "Next"}
           </button>
