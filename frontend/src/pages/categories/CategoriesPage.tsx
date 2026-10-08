@@ -62,7 +62,7 @@ function CategoriesPage() {
         />
       </section>
 
-      <section className="rounded-lg border border-gray-200 bg-[#F8FAFC] p-4">
+      <section className="bento-card p-5">
         <input
           type="text"
           placeholder="Search categories..."
@@ -75,7 +75,7 @@ function CategoriesPage() {
         />
       </section>
 
-      <section className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+      <section className="bento-card p-5">
         {isError && (
           <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
             Failed to load categories.

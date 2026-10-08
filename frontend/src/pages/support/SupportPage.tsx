@@ -61,7 +61,7 @@ function SupportPage() {
       </section>
 
       <section className="grid gap-5 xl:grid-cols-[1fr_1.1fr]">
-        <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+        <article className="bento-card p-5">
           <h2 className="text-xl font-semibold text-[#0F2854]">Quick Help</h2>
           <div className="mt-4 space-y-3">
             {isResourcesLoading ? (
@@ -90,7 +90,7 @@ function SupportPage() {
           </div>
         </article>
 
-        <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+        <article className="bento-card p-5">
           <h2 className="text-xl font-semibold text-[#0F2854]">
             Contact Support
           </h2>
@@ -158,7 +158,7 @@ function SupportPage() {
         </article>
       </section>
 
-      <section className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+      <section className="bento-card p-5">
         <h2 className="text-xl font-semibold text-[#0F2854]">
           Recent Requests
         </h2>

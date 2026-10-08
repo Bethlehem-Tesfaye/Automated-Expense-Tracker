@@ -9,12 +9,12 @@ function ExpenseSummaryCards({
 }: ExpenseSummaryCardsProps) {
   return (
     <section className="grid gap-4 sm:grid-cols-2">
-      <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
-        <p className="text-xs font-medium text-[#1C4D8D]">Total Expenses</p>
-        <p className="mt-1 text-3xl font-bold text-[#0F2854]">{totalCount}</p>
+      <article className="bento-accent p-5">
+        <p className="text-xs font-medium text-white/70">Total Expenses</p>
+        <p className="mt-1 text-3xl font-bold">{totalCount}</p>
       </article>
 
-      <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+      <article className="bento-card p-5">
         <p className="text-xs font-medium text-[#1C4D8D]">Total Spent</p>
         <p className="mt-1 text-3xl font-bold text-[#0F2854]">
           $

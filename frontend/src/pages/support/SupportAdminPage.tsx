@@ -56,7 +56,7 @@ function SupportAdminPage() {
         </div>
       )}
 
-      <section className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+      <section className="bento-card p-5">
         <div className="space-y-3">
           {isLoading ? (
             <p className="text-sm text-[#4988C4]">Loading support queue...</p>

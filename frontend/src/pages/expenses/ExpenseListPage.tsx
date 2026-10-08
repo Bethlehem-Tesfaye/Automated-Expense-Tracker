@@ -120,7 +120,7 @@ function ExpenseListPage() {
         </div>
       </section>
 
-      <section className="rounded-lg border border-gray-200 bg-[#F8FAFC] p-4">
+      <section className="bento-card p-5">
         <div className="flex items-center justify-between border-b border-gray-200 pb-3">
           <p className="text-sm font-semibold text-[#0F2854]">Filter By</p>
 
@@ -207,7 +207,7 @@ function ExpenseListPage() {
         </div>
       </section>
 
-      <section className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+      <section className="bento-card p-5">
         {isExpensesError && (
           <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
             Failed to load expenses.

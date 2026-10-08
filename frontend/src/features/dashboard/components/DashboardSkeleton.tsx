@@ -7,11 +7,11 @@ function DashboardSkeleton() {
         <Skeleton className="h-10 w-72" />
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 sm:grid-cols-2">
         {Array.from({ length: 4 }).map((_, index) => (
           <article
             key={index}
-            className="rounded-xl border border-gray-200 bg-white p-4"
+            className="bento-card p-5"
           >
             <Skeleton className="h-4 w-24" />
             <Skeleton className="mt-3 h-8 w-32" />
@@ -22,7 +22,7 @@ function DashboardSkeleton() {
       </section>
 
       <section className="grid gap-5 xl:grid-cols-2">
-        <article className="rounded-xl border border-gray-200 bg-white p-4">
+        <article className="bento-card p-5">
           <Skeleton className="h-6 w-56" />
           <Skeleton className="mt-2 h-4 w-64" />
           <div className="mt-7 flex flex-col items-center gap-6 lg:flex-row lg:items-start">
@@ -35,7 +35,7 @@ function DashboardSkeleton() {
           </div>
         </article>
 
-        <article className="rounded-xl border border-gray-200 bg-white p-4">
+        <article className="bento-card p-5">
           <Skeleton className="h-6 w-56" />
           <Skeleton className="mt-2 h-4 w-72" />
           <div className="mt-7 flex h-56 items-end gap-4">
@@ -46,7 +46,7 @@ function DashboardSkeleton() {
         </article>
       </section>
 
-      <article className="rounded-xl border border-gray-200 bg-white p-4">
+      <article className="bento-card p-5">
         <Skeleton className="h-6 w-56" />
         <Skeleton className="mt-2 h-4 w-72" />
         <Skeleton className="mt-5 h-72 w-full" />

@@ -49,58 +49,65 @@ function SettingsPage() {
         </p>
       </section>
 
-      <section className="rounded-xl border border-[#BDE8F5] bg-white p-5">
-        {isLoading ? (
-          <div className="mx-auto max-w-3xl space-y-4">
-            <Skeleton className="h-11 w-full md:w-80" />
-            <Skeleton className="h-11 w-full md:w-80" />
-            <Skeleton className="h-11 w-full" />
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="mx-auto max-w-3xl space-y-5">
-            <div className="flex flex-col gap-8 mb-8">
-              <label className="block space-y-1.5">
-                <span className="text-sm font-semibold text-[#0F2854]">
-                  Default Receipt Engine
-                </span>
-                <select
-                  value={defaultReceiptEngine}
-                  onChange={(event) =>
-                    setDefaultReceiptEngine(event.target.value as ReceiptEngine)
-                  }
-                  className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F2854]"
-                >
-                  <option value="basic">Basic (OCR + Gemini)</option>
-                  <option value="pro">Pro (Veryfi)</option>
-                </select>
-              </label>
-
-              <label className="block space-y-1.5">
-                <span className="text-sm font-semibold text-[#0F2854]">
-                  Default Currency
-                </span>
-                <select
-                  value={defaultCurrency}
-                  onChange={(event) =>
-                    setDefaultCurrency(event.target.value as CurrencyCode)
-                  }
-                  className="h-11 w-full rounded-md border border-gray-300 px-3 text-sm text-[#0F2854]"
-                >
-                  <option value="USD">USD ($)</option>
-                  <option value="EUR">EUR (€)</option>
-                  <option value="GBP">GBP (£)</option>
-                  <option value="ETB">ETB (Br)</option>
-                  <option value="KES">KES (KSh)</option>
-                </select>
-              </label>
+      {isLoading ? (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="bento-card space-y-3 p-5">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-11 w-full" />
             </div>
+          ))}
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <label className="bento-card block space-y-2 p-5">
+              <span className="text-sm font-semibold text-[#0F2854]">
+                Default Receipt Engine
+              </span>
+              <p className="text-xs text-[#4988C4]">
+                Which engine reads your receipts by default.
+              </p>
+              <select
+                value={defaultReceiptEngine}
+                onChange={(event) =>
+                  setDefaultReceiptEngine(event.target.value as ReceiptEngine)
+                }
+                className="h-11 w-full rounded-lg border border-gray-300 px-3 text-sm text-[#0F2854]"
+              >
+                <option value="basic">Basic (OCR + Gemini)</option>
+                <option value="pro">Pro (Veryfi)</option>
+              </select>
+            </label>
 
-            <label className="flex items-center justify-between rounded-lg border border-[#DCE9FA] bg-[#F8FBFF] p-3 md:max-w-130">
+            <label className="bento-card block space-y-2 p-5">
+              <span className="text-sm font-semibold text-[#0F2854]">
+                Default Currency
+              </span>
+              <p className="text-xs text-[#4988C4]">
+                Used to display amounts across the app.
+              </p>
+              <select
+                value={defaultCurrency}
+                onChange={(event) =>
+                  setDefaultCurrency(event.target.value as CurrencyCode)
+                }
+                className="h-11 w-full rounded-lg border border-gray-300 px-3 text-sm text-[#0F2854]"
+              >
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="ETB">ETB (Br)</option>
+                <option value="KES">KES (KSh)</option>
+              </select>
+            </label>
+
+            <label className="bento-card flex cursor-pointer items-start justify-between gap-4 p-5 md:col-span-2 xl:col-span-1">
               <div>
                 <p className="text-sm font-semibold text-[#0F2854]">
                   Email Notifications
                 </p>
-                <p className="text-xs text-[#4988C4]">
+                <p className="mt-1 text-xs text-[#4988C4]">
                   Receive reminders and useful account updates by email.
                 </p>
               </div>
@@ -110,24 +117,22 @@ function SettingsPage() {
                 onChange={(event) =>
                   setEmailNotifications(event.target.checked)
                 }
-                className="h-4 w-4 accent-[#1C4D8D]"
+                className="mt-0.5 h-5 w-5 shrink-0 accent-[#1C4D8D]"
               />
             </label>
+          </div>
 
-            <div className="flex justify-end md:justify-end">
-              <button
-                type="submit"
-                disabled={updateSettingsMutation.isPending}
-                className="rounded-md bg-[#1C4D8D] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0F2854] disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {updateSettingsMutation.isPending
-                  ? "Saving..."
-                  : "Save Settings"}
-              </button>
-            </div>
-          </form>
-        )}
-      </section>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={updateSettingsMutation.isPending}
+              className="rounded-lg bg-[#1C4D8D] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0F2854] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {updateSettingsMutation.isPending ? "Saving..." : "Save Settings"}
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }

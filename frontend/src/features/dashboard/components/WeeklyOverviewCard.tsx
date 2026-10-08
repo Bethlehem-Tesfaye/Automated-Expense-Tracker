@@ -48,7 +48,7 @@ function WeeklyOverviewCard({ items }: WeeklyOverviewCardProps) {
     .join(" ");
 
   return (
-    <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+    <article className="bento-card p-5">
       <h3 className="text-xl font-semibold text-[#0F2854]">
         Weekly Spending Overview
       </h3>

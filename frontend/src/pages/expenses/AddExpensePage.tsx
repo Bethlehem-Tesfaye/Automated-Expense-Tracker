@@ -33,7 +33,7 @@ function AddExpensePage() {
       )}
 
       {isLoading ? (
-        <article className="rounded-lg border border-gray-200 bg-[#F8FAFC] p-6">
+        <article className="bento-card p-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <Skeleton className="h-4 w-20" />

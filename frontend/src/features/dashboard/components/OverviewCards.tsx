@@ -2,11 +2,12 @@ import type { StatCardData } from "../types/dashboard";
 
 interface OverviewCardsProps {
   items: StatCardData[];
+  className?: string;
 }
 
-function OverviewCards({ items }: OverviewCardsProps) {
+function OverviewCards({ items, className = "" }: OverviewCardsProps) {
   return (
-    <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <section className={`grid grid-cols-1 gap-4 sm:grid-cols-2 ${className}`}>
       {items.map((item) => {
         const trendColor =
           item.trendTone === "positive"
@@ -18,7 +19,7 @@ function OverviewCards({ items }: OverviewCardsProps) {
         return (
           <article
             key={item.title}
-            className="rounded-xl border border-[#BDE8F5] bg-white p-4"
+            className="bento-card flex flex-col justify-between p-5"
           >
             <p className="text-xs font-medium text-[#1C4D8D]">{item.title}</p>
             <h3 className="mt-1 text-3xl font-bold text-[#0F2854]">

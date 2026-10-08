@@ -98,7 +98,7 @@ function DashboardLayout() {
         />
       )}
 
-      <div className="mx-auto flex h-full max-w-375 border-x border-[#BDE8F5] bg-white">
+      <div className="flex h-full w-full bg-white">
         <DashboardSidebar
           isMobileOpen={isMobileMenuOpen}
           onCloseMobile={() => setIsMobileMenuOpen(false)}
@@ -109,7 +109,7 @@ function DashboardLayout() {
             onToggleMenu={() => setIsMobileMenuOpen((current) => !current)}
           />
 
-          <main className="flex-1 space-y-5 overflow-y-auto bg-gray-50 p-5">
+          <main className="bento-page flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6">
             {isLoading ? (
               <DashboardSkeleton />
             ) : (
@@ -121,43 +121,52 @@ function DashboardLayout() {
                   </div>
                 )}
 
-                <section>
-                  <h1 className="text-3xl font-bold text-[#0F2854]">
-                    Expense Overview
-                  </h1>
-                </section>
-
-                {!hasAnyExpenses && (
-                  <section className="rounded-xl border border-[#BDE8F5] bg-white p-5">
-                    <p className="text-sm text-[#1C4D8D]">
-                      No expenses yet. Upload a receipt or add your first
-                      expense.
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+                  <section className="bento-accent flex flex-col justify-between gap-6 p-6 lg:col-span-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-white/70">
+                        Welcome back{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
+                      </p>
+                      <h1 className="mt-2 text-3xl font-bold leading-tight">
+                        Expense Overview
+                      </h1>
+                      <p className="mt-2 text-sm text-white/80">
+                        {hasAnyExpenses
+                          ? "Here is how your spending is shaping up."
+                          : "No expenses yet. Upload a receipt or add your first expense."}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
                       <Link
                         to="/expenses/scan"
-                        className="inline-flex h-10 items-center rounded-md border border-[#1C4D8D] px-4 text-sm font-semibold text-[#1C4D8D]"
+                        className="inline-flex h-10 items-center rounded-lg bg-white px-4 text-sm font-semibold text-[#1C4D8D] transition-transform hover:-translate-y-0.5"
                       >
-                        Upload Receipt
+                        Scan Receipt
                       </Link>
                       <Link
                         to="/expenses/add"
-                        className="inline-flex h-10 items-center rounded-md bg-[#1C4D8D] px-4 text-sm font-semibold text-white"
+                        className="inline-flex h-10 items-center rounded-lg border border-white/40 px-4 text-sm font-semibold text-white transition-colors hover:bg-white/10"
                       >
                         Add Expense
                       </Link>
                     </div>
                   </section>
-                )}
 
-                <OverviewCards items={stats} />
+                  <OverviewCards
+                    items={stats}
+                    className="lg:col-span-8"
+                  />
 
-                <section className="grid gap-5 xl:grid-cols-2">
-                  <SpendingByCategoryCard items={categorySpending} />
-                  <MonthlyTrendCard items={monthlySpending} />
-                </section>
-
-                <WeeklyOverviewCard items={weeklySpending} />
+                  <div className="lg:col-span-5">
+                    <SpendingByCategoryCard items={categorySpending} />
+                  </div>
+                  <div className="lg:col-span-7">
+                    <MonthlyTrendCard items={monthlySpending} />
+                  </div>
+                  <div className="lg:col-span-12">
+                    <WeeklyOverviewCard items={weeklySpending} />
+                  </div>
+                </div>
               </>
             )}
           </main>

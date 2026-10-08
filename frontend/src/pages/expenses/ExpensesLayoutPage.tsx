@@ -17,7 +17,7 @@ function ExpensesLayoutPage() {
         />
       )}
 
-      <div className="mx-auto flex h-full max-w-375 border-x border-[#BDE8F5] bg-white">
+      <div className="flex h-full w-full bg-white">
         <DashboardSidebar
           isMobileOpen={isMobileMenuOpen}
           onCloseMobile={() => setIsMobileMenuOpen(false)}
@@ -27,7 +27,7 @@ function ExpensesLayoutPage() {
           <DashboardHeader
             onToggleMenu={() => setIsMobileMenuOpen((current) => !current)}
           />
-          <main className="flex-1 overflow-y-auto bg-gray-50 p-5">
+          <main className="bento-page flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6">
             <Outlet />
           </main>
         </div>

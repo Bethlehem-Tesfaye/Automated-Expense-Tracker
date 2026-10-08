@@ -92,7 +92,7 @@ function ProfilePage() {
       />
       <div className="absolute inset-0 bg-[#0F2854]/75" />
       {isEditMode && (
-        <div className="relative z-20 mx-auto mb-4 w-full max-w-5xl">
+        <div className="relative z-20 mb-4 w-full">
           <button
             type="button"
             onClick={() => navigate("/dashboard")}
@@ -103,7 +103,7 @@ function ProfilePage() {
           </button>
         </div>
       )}
-      <div className="relative z-10 mx-auto w-full max-w-5xl overflow-hidden rounded-3xl border border-[#BDE8F5]/50 bg-white/10 shadow-2xl backdrop-blur-md">
+      <div className="relative z-10 w-full overflow-hidden rounded-3xl border border-[#BDE8F5]/50 bg-white/10 shadow-2xl backdrop-blur-md">
         <div className="grid min-h-155 md:grid-cols-[1.05fr_1.35fr]">
           <section className="flex flex-col justify-between bg-[#0F2854]/80 p-8 text-white sm:p-10">
             <div>

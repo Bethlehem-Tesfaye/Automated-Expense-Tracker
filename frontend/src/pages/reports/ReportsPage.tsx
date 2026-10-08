@@ -92,7 +92,7 @@ function ReportsPage() {
         </p>
       </section>
 
-      <section className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+      <section className="bento-card p-5">
         <div className="mb-4 flex justify-end">
           <select
             value={exportFormat}
@@ -199,13 +199,13 @@ function ReportsPage() {
       )}
 
       {isLoading ? (
-        <div className="rounded-xl border border-[#BDE8F5] bg-white p-4 text-sm text-[#1C4D8D]">
+        <div className="bento-card p-5 text-sm text-[#1C4D8D]">
           Generating report...
         </div>
       ) : report ? (
         <>
           <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+            <article className="bento-card p-5">
               <p className="text-xs font-medium text-[#1C4D8D]">
                 Total Spending
               </p>
@@ -213,13 +213,13 @@ function ReportsPage() {
                 {formatMoney(report.totals.totalAmount)}
               </h3>
             </article>
-            <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+            <article className="bento-card p-5">
               <p className="text-xs font-medium text-[#1C4D8D]">Transactions</p>
               <h3 className="mt-1 text-3xl font-bold text-[#0F2854]">
                 {report.totals.transactionCount}
               </h3>
             </article>
-            <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+            <article className="bento-card p-5">
               <p className="text-xs font-medium text-[#1C4D8D]">
                 Average Transaction
               </p>
@@ -230,7 +230,7 @@ function ReportsPage() {
           </section>
 
           <section className="grid gap-5 xl:grid-cols-2">
-            <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+            <article className="bento-card p-5">
               <h3 className="text-xl font-semibold text-[#0F2854]">
                 Category Breakdown
               </h3>
@@ -264,7 +264,7 @@ function ReportsPage() {
               </div>
             </article>
 
-            <article className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+            <article className="bento-card p-5">
               <h3 className="text-xl font-semibold text-[#0F2854]">Period</h3>
               <p className="mt-3 text-sm text-[#4988C4]">
                 {new Date(report.from).toLocaleDateString("en-US")} -{" "}
@@ -276,7 +276,7 @@ function ReportsPage() {
             </article>
           </section>
 
-          <section className="rounded-xl border border-[#BDE8F5] bg-white p-4">
+          <section className="bento-card p-5">
             <h3 className="text-xl font-semibold text-[#0F2854]">
               Expense Details
             </h3>

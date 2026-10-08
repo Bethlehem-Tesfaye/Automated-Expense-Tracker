@@ -273,7 +273,7 @@ function ScanReceiptPage() {
 
       <section className="grid gap-6 xl:grid-cols-[1.05fr_1fr]">
         <div className="space-y-6">
-          <article className="rounded-xl border border-dashed border-[#BDE8F5] bg-white p-6">
+          <article className="bento-card border-dashed p-6">
             <label
               onDragOver={(event) => event.preventDefault()}
               onDrop={handleDropImage}
@@ -318,7 +318,7 @@ function ScanReceiptPage() {
             </label>
           </article>
 
-          <article className="rounded-xl border border-[#BDE8F5] bg-white p-5">
+          <article className="bento-card p-5">
             <h2 className="text-2xl font-semibold text-[#0F2854]">
               Receipt Preview
             </h2>
@@ -338,7 +338,7 @@ function ScanReceiptPage() {
           </article>
         </div>
 
-        <article className="rounded-xl border border-[#BDE8F5] bg-white p-5">
+        <article className="bento-card p-5">
           <h2 className="text-2xl font-semibold text-[#0F2854]">
             OCR Extracted Fields
           </h2>
